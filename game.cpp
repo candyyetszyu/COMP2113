@@ -8,18 +8,18 @@ using namespace std;
 const int tile_size = 40;
 
 struct Player{
-	int money = 0;
-	int position = 0;
-	string name = "";
-	bool in_prison = false;
+	int money = 0; // amount of money the player has
+	int position = 0; // position of the player on the board, integer between 0 and 39
+	string name = ""; // name of player
+	bool in_prison = false; //
 	bool is_bot;
 };
 
 struct Tile{
-	int owner = -1;
-	int houses = 0;
-	int hotel = 0;
-	int type = 0;
+	int owner = -1; // int representing the i-th owner in vector<Player> players, -1 when no owner
+	int houses = 0; // number of houses on the plot
+	int hotel = 0; // number of hotels on the plot
+	int type; // type of tile
 	string name = "";
 };
 
@@ -29,7 +29,7 @@ int run_game(
 		Tile tiles[],
 		int free_parking,
 		vector<string> chance_card
-	){	
+	){
 	int i = 0;
 	string cmd = "";
 	while (true){
@@ -38,9 +38,9 @@ int run_game(
 		int dice2 = rand() % 6 + 1;
 		cout << players[i].name << " rolled " << dice1 << " and " << dice2 << " on the dice." << endl;
 
-		// move
+		// move player position
 		players[i].position = (players[i].position + dice1 + dice2) % tile_size;
-		cout << players[i].name << " moved to tile" <<  players[i].position << "." << endl;
+		cout << players[i].name << " moved to tile " <<  players[i].position << "." << endl;
 
 		//handle actions with tiles
 

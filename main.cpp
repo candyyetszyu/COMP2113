@@ -17,7 +17,6 @@ int main(){
 			cout << "Please input number of players:" << endl;
 			cin >> cmd;
 
-			//TODO: implement initialization
 			Player player;
 			vector<Player> players;
 			for (int i = 0; i < stoi(cmd); i++){
@@ -26,13 +25,13 @@ int main(){
 				players.push_back(player);
 			}
 			Tile tiles[40] = {}; // TODO: add data
-			vector<string> chance_card;
+			vector<string> chance_card; // TODO: add data
 
 			run_game(stoi(cmd), players, tiles, 0, chance_card);
 		} else if (cmd == "load"){
 			//handle loading here
 		} else {
-				cout << "Command \"" << cmd << "\" is invalid. Please retry." << endl;
+			cout << "Command \"" << cmd << "\" is invalid. Please retry." << endl;
 		}
 	}
 }
