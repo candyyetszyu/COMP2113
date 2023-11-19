@@ -1,3 +1,5 @@
 # Monopoly
 Welcome to our game, Monopoly.
-In this game, 
+It is a real-estate board game.
+
+Your
