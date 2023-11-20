@@ -6,7 +6,7 @@ Your goal is to remain financially solvent by buying and developing pieces of pr
 
 In this game, we will use different districts in Hong Kong to replace the traditional game board. They can be Mong Kok, Tsim Sha Tsui, Central, Sha Tin, etc.
 
-On the other hand, we add several game systems to diversify the game, like free parking, jail, chance cards/ community chests, and more! They can affect players' moves in numerous ways Therefore, players have to pay attention to the decisions of other opponents.
+On the other hand, we add several game systems to diversify the game, like free parking, jail, chance cards/ community chests, and more! They can affect players' moves in numerous ways. Therefore, players have to pay attention to the decisions of other opponents.
 
 Monopoly - Hong Kong Version is based on C++ programming, and we used dynamic memory management, data structures, randomness, and so on to run the program so that it is fair to all players!
 
