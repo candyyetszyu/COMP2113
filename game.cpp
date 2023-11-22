@@ -20,6 +20,8 @@ struct Tile{
     int houses = 0; // number of houses on the plot
     int hotel = 0; // number of hotels on the plot
     int type; // type of tile
+    int price; //price
+    int group; //color
     string name = "";
 };
 
