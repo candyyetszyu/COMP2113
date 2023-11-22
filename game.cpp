@@ -55,6 +55,8 @@ int run_game(
         switch (tiles[players[i].position].type) {
             case 0: // chance
                 cout << players[i].name << " got a chance card!" << endl;
+                string card = DrawChanceCard(chance_card);
+                cout << "Card: " << card << endl;
                 // TODO: Implement chance card functionality
                 break;
             case 1: // community chest
