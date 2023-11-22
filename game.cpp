@@ -27,6 +27,11 @@ struct Tile{
     string name = "";
 };
 
+string DrawChanceCard(vector<string> chance_card) {
+    int randomIndex = rand() % chance_card.size();
+    return chance_card[randomIndex];
+}
+
 int run_game(
         int n, // number of players
         vector<Player> players,
