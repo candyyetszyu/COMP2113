@@ -29,7 +29,7 @@ int run_game(
         Tile tiles[],
         int free_parking,
         vector<string> chance_card
-){
+    ){
     int i = 0;
     string cmd = "";
     while (true){
@@ -61,7 +61,7 @@ int run_game(
                 cout << players[i].name << " moved to free parking and received $" << free_parking << "!" << endl;
                 players[i].money += free_parking;
                 break;
-            case 4: // property type
+            case 4: // property
                 // TODO: Implement property tile functionality
                 break;
             case 5: // go
