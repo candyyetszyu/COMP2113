@@ -3,6 +3,8 @@
 #include<cstdlib>
 #include<vector>
 
+#include "rules.h"
+
 using namespace std;
 
 const int tile_size = 40;
