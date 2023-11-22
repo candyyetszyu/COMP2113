@@ -2,6 +2,7 @@
 #include<string>
 #include<cstdlib>
 #include<vector>
+#include<algorithm>
 
 #include "rules.h"
 
@@ -33,14 +34,18 @@ string DrawChanceCard(vector<string> chance_card) {
 }
 
 int run_game(
-        int n, // number of players
+        int n,
         vector<Player> players,
         Tile tiles[],
         int free_parking,
         vector<string> chance_card
-    ){
+        ) {
     int i = 0;
     string cmd = "";
+
+    // shuffle the chance card stack before starting the game
+    random_shuffle(chance_card.begin(), chance_card.end());
+
     while (true){
         // roll dice
         int dice1 = rand() % 6 + 1;
@@ -55,9 +60,13 @@ int run_game(
         switch (tiles[players[i].position].type) {
             case 0: // chance
                 cout << players[i].name << " got a chance card!" << endl;
-                string card = DrawChanceCard(chance_card);
-                cout << "Card: " << card << endl;
-                // TODO: Implement chance card functionality
+
+                // apply chance card effect
+                if (!chance_card.empty()) {
+                    cout << chance_card.back() << endl;
+                    chance_card.pop_back(); // remove the last chance card
+                }
+
                 break;
             case 1: // community chest
                 cout << players[i].name << " got a community chest card!" << endl;
