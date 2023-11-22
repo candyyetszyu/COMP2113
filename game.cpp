@@ -87,7 +87,8 @@ int run_game(
             // end round
             cin >> cmd;
 
-            //handle commands
+            if (cmd == 'rules'){
+               rule();
             i = 0;
 
         } else {
