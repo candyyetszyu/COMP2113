@@ -28,9 +28,56 @@ struct Tile{
     string name = "";
 };
 
-string DrawChanceCard(vector<string> chance_card) {
+string DrawChanceCard(vector<ChanceCard> chance_card) {
     int randomIndex = rand() % chance_card.size();
     return chance_card[randomIndex];
+}
+enum class ChanceCardType {
+    AdvanceToGo,
+    GoToJail,
+    GoBackThreeSpaces,
+    PayEveryone,
+    PayBank
+};
+
+struct ChanceCard {
+    ChanceCardType type;
+    int amount; // amount is used for paying everyone $200 or paying the bank $500
+};
+
+void apply_chance_card_effect(Player& player, const ChanceCard& card, Tile tiles[], int free_parking) {
+    switch (card.type) {
+        case ChanceCardType::AdvanceToGo:
+            cout << player.name << " advances to GO and collects $500." << endl;
+            player.position = tiles[0].index; // GO tile is always at index 0
+            player.money += 500;
+            break;
+
+        case ChanceCardType::GoToJail:
+            cout << player.name << " goes to jail!" << endl;
+            player.position = tiles[10].index; // Jail tile is always at index 10
+            break;
+
+        case ChanceCardType::GoBackThreeSpaces:
+            cout << player.name << " goes back 3 spaces." << endl;
+            player.position = (player.position - 3 + tile_size) % tile_size;
+            break;
+
+        case ChanceCardType::PayEveryone:
+            cout << player.name << " has to pay everyone $200." << endl;
+            player.money -= 200;
+            for (auto& p : players) {
+                if (p.name != player.name) {
+                    p.money += 200;
+                }
+            }
+            break;
+
+        case ChanceCardType::PayBank:
+            cout << player.name << " has to pay the bank $500." << endl;
+            player.money -= 500;
+            break;
+    }
 }
 
 int run_game(
@@ -38,7 +85,7 @@ int run_game(
         vector<Player> players,
         Tile tiles[],
         int free_parking,
-        vector<string> chance_card
+        vector<ChanceCard> chance_card
         ) {
     int i = 0;
     string cmd = "";
@@ -61,9 +108,9 @@ int run_game(
             case 0: // chance
                 cout << players[i].name << " got a chance card!" << endl;
 
-                // apply chance card effect
+                // apply chance card effect if available
                 if (!chance_card.empty()) {
-                    cout << chance_card.back() << endl;
+                    apply_chance_card_effect(players[i], chance_card.back(), tiles, free_parking);
                     chance_card.pop_back(); // remove the last chance card
                 }
 
