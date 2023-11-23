@@ -146,8 +146,8 @@ int run_game(
                     players[i].in_jail = true; // Set the player in jail
                     break;
                 case 3: // free parking
-                    cout << players[i].name << " moved to free parking and received $" << free_parking << "!" << endl;
-                    players[i].money += free_parking;
+                    cout << players[i].name << " moved to free parking." << endl;
+                    // Nothing happens, player's turn ends.
                     break;
                 case 4: // property
                     // TODO: Implement property tile functionality
