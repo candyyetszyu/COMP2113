@@ -3,6 +3,6 @@
 
 #define INITALISEDTILES_H
 
-void initalised_tiles(&tiles);
+void initalised_tiles(tiles[]);
 
 #endif
