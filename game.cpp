@@ -153,7 +153,8 @@ int run_game(
                     // TODO: Implement property tile functionality
                     break;
                 case 5: // go
-                    // TODO: Implement go tile functionality
+                    cout << players[i].name << " passed or landed on Go and collected $200." << endl;
+                    players[i].money += 200;
                     break;
                 case 6: // tax
                     cout << players[i].name << " paid $" << tiles[players[i].position].name << " tax!" << endl;
