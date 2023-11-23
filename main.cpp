@@ -4,6 +4,7 @@
 
 #include"game.h"
 #include "rules.h"
+#include "initalised_tiles.h"
 
 using namespace std;
 
