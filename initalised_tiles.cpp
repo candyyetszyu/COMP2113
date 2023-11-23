@@ -4,7 +4,8 @@ using namespace std;
 
 void initalised_tiles(&tiles){
   for (int i=0; i<40; i++){
-     
+    //type0_8: go&locations with color
+    
     //type_0, color_0: Go
     if(i==0){
         tiles[i]={-1,0,0,0,-2000,0, name="Go"};
@@ -107,4 +108,33 @@ void initalised_tiles(&tiles){
       tiles[i]={-1,0,0,8,4000,8,name="The Peak"};
     }
   }
+
+//locations without color
+
+//type_9, color_9: Airport Station, Hong Kong Electric, Tsing Yi Station, Kowloon Station
+else if(i==5||i==12||i==15||i==25){
+  if(i==5){
+    tiles[i]={-1,0,0,9,2000,9,name="Airport Station"};
+  }
+  else if(i==12){
+    tiles[i]={-1,0,0,9,1500,9,name="Hong Kong Electric"};
+  }
+  else if(i==15){
+    tiles[i]={-1,0,0,9,2000,9,name="Tsing Yi Station"};
+  }
+  else{
+    tiles[i]={-1,0,0,9,2000,9,name="Kowloon Station"};
+  }
+}
+    
+//Functional location
+    
+//type_10, color_10: Community Chest
+    
+//type_11, color_11: Income Tax
+//type_12, color_12: Chance
+//type_13, color_13: Stanley Jail
+//type_14, color_14: Free Parking
+//type_15, color_15: Provincial
+//type_16, color_16: Water Works
 }
