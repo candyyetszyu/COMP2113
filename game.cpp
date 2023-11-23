@@ -10,7 +10,7 @@ using namespace std;
 
 const int tile_size = 40;
 
-struct Player{
+struct Player {
     int money = 0; // amount of money the player has
     int position = 0; // position of the player on the board, integer between 0 and 39
     string name = ""; // name of player
@@ -18,7 +18,7 @@ struct Player{
     bool is_bot;
 };
 
-struct Tile{
+struct Tile {
     int owner = -1; // int representing the i-th owner in vector<Player> players, -1 when no owner
     int houses = 0; // number of houses on the plot
     int hotel = 0; // number of hotels on the plot
@@ -28,10 +28,16 @@ struct Tile{
     string name = "";
 };
 
-string DrawChanceCard(vector<ChanceCard> chance_card) {
+struct ChanceCard {
+    ChanceCardType type;
+    int amount; // amount is used for paying everyone $200 or paying the bank $500
+};
+
+string DrawChanceCard(vector<ChanceCard>& chance_card) {
     int randomIndex = rand() % chance_card.size();
     return chance_card[randomIndex];
 }
+
 enum class ChanceCardType {
     AdvanceToGo,
     GoToJail,
@@ -40,12 +46,7 @@ enum class ChanceCardType {
     PayBank
 };
 
-struct ChanceCard {
-    ChanceCardType type;
-    int amount; // amount is used for paying everyone $200 or paying the bank $500
-};
-
-void apply_chance_card_effect(Player& player, const ChanceCard& card, Tile tiles[], int free_parking) {
+void apply_chance_card_effect(Player& player, const ChanceCard& card, Tile tiles[], int free_parking, vector<Player>& players) {
     switch (card.type) {
         case ChanceCardType::AdvanceToGo:
             cout << player.name << " advances to GO and collects $500." << endl;
@@ -93,7 +94,7 @@ int run_game(
     // shuffle the chance card stack before starting the game
     random_shuffle(chance_card.begin(), chance_card.end());
 
-    while (true){
+    while (true) {
         // roll dice
         int dice1 = rand() % 6 + 1;
         int dice2 = rand() % 6 + 1;
@@ -103,14 +104,14 @@ int run_game(
         players[i].position = (players[i].position + dice1 + dice2) % tile_size;
         cout << players[i].name << " moved to tile " << players[i].position << "." << endl;
 
-        //handle actions with tiles
+        // handle actions with tiles
         switch (tiles[players[i].position].type) {
             case 0: // chance
                 cout << players[i].name << " got a chance card!" << endl;
 
                 // apply chance card effect if available
                 if (!chance_card.empty()) {
-                    apply_chance_card_effect(players[i], chance_card.back(), tiles, free_parking);
+                    apply_chance_card_effect(players[i], chance_card.back(), tiles, free_parking, players);
                     chance_card.pop_back(); // remove the last chance card
                 }
 
@@ -146,12 +147,13 @@ int run_game(
                 break;
         }
 
-        if (i + 1 == n){
+        if (i + 1 == n) {
             // end round
             cin >> cmd;
 
-            if (cmd == 'rules'){
-               rule();
+            if (cmd == "rules") {
+                rule();
+            }
             i = 0;
 
         } else {
@@ -159,3 +161,4 @@ int run_game(
         }
     }
 }
+
