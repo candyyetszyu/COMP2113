@@ -130,6 +130,12 @@ void initalised_tiles(&tiles){
   else if(i==0){
         tiles[i]={-1,0,0,0,-2000,0, name="Go"};
   }
+
+  //type_6, color_6: Income Tax & Salary Tax
+  //need to amend
+else if(i==4){
+  tiles[i]={-1,0,0,11,0,11,name="Income Tax"};
+}
 //locations without color
 
 //type_9, color_9: Airport Station, Hong Kong Electric, Tsing Yi Station, Kowloon Station
@@ -152,11 +158,7 @@ else if(i==5||i==12||i==15||i==25){
     
 //type_10, color_10: 
     
-//type_11, color_11: Income Tax
-//need to amend
-else if(i==4){
-  tiles[i]={-1,0,0,11,0,11,name="Income Tax"};
-}
+
     
 //type_12, color_12: 
 
