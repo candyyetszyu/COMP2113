@@ -27,8 +27,9 @@ int main(){
 				player.is_bot = i;  // results in is_bot = false only for the first player
 				players.push_back(player);
 			}
-			Tile tiles[40] = {}; // TODO: add data
-			vector<string> chance_card; // TODO: add data
+			Tile tiles[40];
+			initalised_tiles(tiles);
+			vector<ChanceCard> chance_card; // TODO: add data
 
 			run_game(stoi(cmd), players, tiles, 0, chance_card);
 		} else if (cmd == "load"){

@@ -5,58 +5,26 @@
 #include<algorithm>
 
 #include "rules.h"
+#include "initalised_tiles.h"
 
 using namespace std;
 
-const int tile_size = 40;
-
-struct Player {
-    int money = 0; // amount of money the player has
-    int position = 0; // position of the player on the board, integer between 0 and 39
-    string name = ""; // name of player
-    bool in_jail = false; // whether player is in jail or not
-    bool is_bot;
-};
-
-struct Tile {
-    int owner = -1; // int representing the i-th owner in vector<Player> players, -1 when no owner
-    int houses = 0; // number of houses on the plot
-    int hotel = 0; // number of hotels on the plot
-    int type; // type of tile
-    int price; //price
-    int group; //color
-    string name = "";
-};
-
-struct ChanceCard {
-    ChanceCardType type;
-    int amount; // amount is used for paying everyone $200 or paying the bank $500
-};
-
-string DrawChanceCard(vector<ChanceCard>& chance_card) {
+ChanceCard DrawChanceCard(vector<ChanceCard>& chance_card) {
     int randomIndex = rand() % chance_card.size();
     return chance_card[randomIndex];
 }
-
-enum class ChanceCardType {
-    AdvanceToGo,
-    GoToJail,
-    GoBackThreeSpaces,
-    PayEveryone,
-    PayBank
-};
 
 void apply_chance_card_effect(Player& player, const ChanceCard& card, Tile tiles[], int free_parking, vector<Player>& players) {
     switch (card.type) {
         case ChanceCardType::AdvanceToGo:
             cout << player.name << " advances to GO and collects $500." << endl;
-            player.position = tiles[0].index; // GO tile is always at index 0
+            player.position = 0; // GO tile is always at index 0
             player.money += 500;
             break;
 
         case ChanceCardType::GoToJail:
             cout << player.name << " goes to jail!" << endl;
-            player.position = tiles[10].index; // Jail tile is always at index 10
+            player.position = 10; // Jail tile is always at index 10
             player.in_jail = true; // Set the player in jail
             break;
 
@@ -171,13 +139,19 @@ int run_game(
 
         if (i + 1 == n) {
             // end round
-            cin >> cmd;
+            while (true){
+            	cout << "Enter command: quit/next/rules/save/load:" << endl;
+            	cin >> cmd;
+	            if (cmd == "rules") {
+	                rule();
+	            } else if (cmd == "quit"){
+	            	return 0;
+	            } else if (cmd == "next"){
+	            	break;
+	            }
+        	}
 
-            if (cmd == "rules") {
-                rule();
-            }
-            i = 0;
-
+	        i = 0;
         } else {
             i++;
         }
