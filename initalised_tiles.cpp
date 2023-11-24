@@ -6,12 +6,29 @@ void initalised_tiles(&tiles){
   for (int i=0; i<40; i++){
     //type0_8: go&locations with color
     
-    //type_0, color_0: Go
-    if(i==0){
-        tiles[i]={-1,0,0,0,-2000,0, name="Go"};
-     }
+    //type_0, color_0: Chance
+    if(i==7||i==36){
+      tiles[i]={-1,0,0,12,0,12,name="Chance"};
+    }
 
-    //type_1, color_1: Chek Lap Kok, Lantau Island
+    //type_1, color_1: Community Chest
+    else if(i==2||i==17||i==33){
+      tiles[i]={-1,0,0,10,0,10,name="Community Chest"};
+    }
+      
+    //type_2, color_2: Stanley Jail
+    else if(i==10||i==30){
+      tiles[i]={-1,0,0,13,0,13,name="Stanley Jail"};
+    } 
+    
+    //type_3, color_3: Free Parking
+    else if(i==22){
+      tiles[i]={-1,0,0,14,0,14,name="Free Parking"};
+    } 
+
+    //type_4, color_4: property
+
+    //Chek Lap Kok, Lantau Island
     else if(i==1||i==3){
       if(i==1){
         tiles[i]={-1,0,0,1,600,1,name="Chek Lap Kok"};
@@ -21,7 +38,7 @@ void initalised_tiles(&tiles){
       }
     }
 
-    //type_2, color_2: Ngong Ping, Cheung Chau, Lamma Island
+    //Ngong Ping, Cheung Chau, Lamma Island
     else if(i==6||i==8||i==9){
       if(i==6){
         tiles[i]={-1,0,0,2,1000,2,name="Ngong Ping"};
@@ -34,7 +51,7 @@ void initalised_tiles(&tiles){
       }
     }
 
-    //type_3, color_3: Lo Wu, Tin Shui Wai, Sham Tseng
+    //Lo Wu, Tin Shui Wai, Sham Tseng
     else if(i==11||i==13||i==14){
       if(i==11){
         tiles[i]={-1,0,0,3,1400,3,name="Lo Wu"};
@@ -46,8 +63,8 @@ void initalised_tiles(&tiles){
          tiles[i]={-1,0,0,3,1600,3,name="Sham Tseng"};
       }
     }
-
-    //type_4, color_4: Kwai Chung, Sha Tin, Tseung Kwan O
+    
+    //Kwai Chung, Sha Tin, Tseung Kwan O
     else if(i==16||i==18||i==19){
       if(i==16){
           tiles[i]={-1,0,0,4,1800,4,name="Kwai Chung"};
@@ -60,7 +77,7 @@ void initalised_tiles(&tiles){
       }
     }
 
-  //type_5, color_5: Lei Yue Mun, Wong Tai Sin, Kowloon Tong
+  //Lei Yue Mun, Wong Tai Sin, Kowloon Tong
   else if(i==21||i==23||i==24){
     if(i==21){
       tiles[i]={-1,0,0,5,2200,5,name="Lei Yue Mun"};
@@ -73,7 +90,7 @@ void initalised_tiles(&tiles){
     }
   }
 
-  //type_6, color_6: Kwun Tong, Mong Kok, Tsim Sha Tsui
+  //Kwun Tong, Mong Kok, Tsim Sha Tsui
   else if(i==26||i==27||i==29){
     if(i==26){
       tiles[i]={-1,0,0,6,2600,6,name="Kwun Tong"};
@@ -86,7 +103,7 @@ void initalised_tiles(&tiles){
     }
   }
 
-  //type_7, color_7: Causeway Bay, Cyberport, Central
+  //Causeway Bay, Cyberport, Central
   else if(i==31||i==32||i==34){
     if(i==31){
       tiles[i]={-1,0,0,7,3000,7,name="Causeway Bay"};
@@ -99,7 +116,7 @@ void initalised_tiles(&tiles){
     }
   }
 
-  //type_8, color_8: Repulse Bay,The Peak
+  //Repulse Bay,The Peak
   else if(i==37||i==39){
     if(i==37){
       tiles[i]={-1,0,0,8,3500,8,name="Repulse Bay"};
@@ -109,6 +126,10 @@ void initalised_tiles(&tiles){
     }
   }
 
+  //type_5, color_5: Go
+  else if(i==0){
+        tiles[i]={-1,0,0,0,-2000,0, name="Go"};
+  }
 //locations without color
 
 //type_9, color_9: Airport Station, Hong Kong Electric, Tsing Yi Station, Kowloon Station
@@ -129,10 +150,7 @@ else if(i==5||i==12||i==15||i==25){
     
 //Functional location
     
-//type_10, color_10: Community Chest
-else if(i==2||i==17||i==33){
-  tiles[i]={-1,0,0,10,0,10,name="Community Chest"};
-}
+//type_10, color_10: 
     
 //type_11, color_11: Income Tax
 //need to amend
@@ -140,20 +158,11 @@ else if(i==4){
   tiles[i]={-1,0,0,11,0,11,name="Income Tax"};
 }
     
-//type_12, color_12: Chance
-else if(i==7||i==36){
-  tiles[i]={-1,0,0,12,0,12,name="Chance"};
-}
+//type_12, color_12: 
 
-//type_13, color_13: Stanley Jail
-else if(i==10||i==30){
-  tiles[i]={-1,0,0,13,0,13,name="Stanley Jail"};
-} 
+//type_13, color_13: 
   
-//type_14, color_14: Free Parking
-else if(i==22){
-  tiles[i]={-1,0,0,14,0,14,name="Free Parking"};
-} 
+//type_14, color_14: 
   
 //type_15, color_15: Provincial
 else if(i==20){
