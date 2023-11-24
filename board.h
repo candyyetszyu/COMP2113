@@ -2,6 +2,6 @@
 
 #define BOARD_H
 
-void PrintBoard(const Player& player, const std::vector<Property>& properties);
+void PrintBoard(const std::vector<player>);
 
 #endif
