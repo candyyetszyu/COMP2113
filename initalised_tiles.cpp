@@ -130,11 +130,43 @@ else if(i==5||i==12||i==15||i==25){
 //Functional location
     
 //type_10, color_10: Community Chest
+else if(i==2||i==17||i==33){
+  tiles[i]={-1,0,0,10,0,10,name="Community Chest"};
+}
     
 //type_11, color_11: Income Tax
+//need to amend
+else if(i==4){
+  tiles[i]={-1,0,0,11,0,11,name="Income Tax"};
+}
+    
 //type_12, color_12: Chance
+else if(i==7||i==36){
+  tiles[i]={-1,0,0,12,0,12,name="Chance"};
+}
+
 //type_13, color_13: Stanley Jail
+else if(i==10||i==30){
+  tiles[i]={-1,0,0,13,0,13,name="Stanley Jail"};
+} 
+  
 //type_14, color_14: Free Parking
+else if(i==22){
+  tiles[i]={-1,0,0,14,0,14,name="Free Parking"};
+} 
+  
 //type_15, color_15: Provincial
+else if(i==20){
+  tiles[i]={-1,0,0,15,0,15,name="Provincial"};
+} 
+  
 //type_16, color_16: Water Works
+else if(i==28){
+  tiles[i]={-1,0,0,16,1500,16,name="Water Works"};
+} 
+  
+//type_17, color_17: Salary Tax
+else if(i==38){
+  tiles[i]={-1,0,0,17,750,17,name="Salary Tax"};
+}   
 }
