@@ -28,4 +28,6 @@ void rule(){
 
     cout << "11. The last remaining player is declared the winner of the game." << endl;
 
+    cout << "-------------------------------------------------------------------------" << endl;
+
 }
