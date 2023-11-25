@@ -10,6 +10,7 @@ struct Player {
     std::string name = ""; // name of player
     bool in_jail = false; // whether player is in jail or not
     bool is_bot;
+    bool change(int amount);
 };
 
 struct Tile {
@@ -38,6 +39,16 @@ struct ChanceCard {
     int amount; // amount is used for paying everyone $200 or paying the bank $500
 };
 
-int run_game(int, std::vector<Player>, Tile[], int, std::vector<ChanceCard>);
+struct Game{
+    int n;
+    std::vector<Player> players;
+    Tile tiles[40];
+    int free_parking;
+    std::vector<ChanceCard> chance_card;
+    int run();
+    Game();
+    Game(std::string filename);
+    bool save(std::string filename);
+};
 
 #endif

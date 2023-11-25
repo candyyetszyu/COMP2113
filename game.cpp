@@ -10,6 +10,17 @@
 
 using namespace std;
 
+bool Player::change(int amount){
+	// int amount: positive when player receives money, negative when player loses money
+	// returns true when succeed, false when fail
+	money += amount;
+	if (money < 0){
+		cout << name << " has run out of funds."
+		// TODO: add mortgage handling
+	}
+	return true;
+}
+
 ChanceCard DrawChanceCard(vector<ChanceCard>& chance_card) {
     int randomIndex = rand() % chance_card.size();
     return chance_card[randomIndex];
@@ -20,7 +31,7 @@ void apply_chance_card_effect(Player& player, const ChanceCard& card, Tile tiles
         case ChanceCardType::AdvanceToGo:
             cout << player.name << " advances to GO and collects $500." << endl;
             player.position = 0; // GO tile is always at index 0
-            player.money += 500;
+            player.change(500);
             break;
 
         case ChanceCardType::GoToJail:
@@ -36,34 +47,41 @@ void apply_chance_card_effect(Player& player, const ChanceCard& card, Tile tiles
 
         case ChanceCardType::PayEveryone:
             cout << player.name << " has to pay everyone $200." << endl;
-            player.money -= 200;
-            for (auto& p : players) {
-                if (p.name != player.name) {
-                    p.money += 200;
-                }
-            }
+            if (player.change(-200)){
+	            for (auto& p : players) {
+	                if (p.name != player.name) {
+	                    p.change(200);
+	                }
+	            }
+	        }
             break;
 
         case ChanceCardType::PayBank:
             cout << player.name << " has to pay the bank $500." << endl;
-            player.money -= 500;
+            if(player.change(-500)){
+
+            }
             break;
     }
 }
 
-void pay_fine(Player& player, int fine) {
-    player.money -= fine;
-    player.in_jail = false;
-    cout << player.name << " paid a fine of $" << fine << " and is released from jail." << endl;
+Game::Game(){
+	//game initialisation for new game
+	Player player;
+    for (int i = 0; i < stoi(cmd); i++){
+        player.name = "Player " + to_string(i);
+        player.is_bot = i;  // results in is_bot = false only for the first player
+        players.push_back(player);
+    }
+    initalised_tiles(tiles);
 }
 
-int run_game(
-        int n,
-        vector<Player> players,
-        Tile tiles[],
-        int free_parking,
-        vector<ChanceCard> chance_card
-        ) {
+Game::Game(string filename){
+	//load game from file
+	// TODO
+}
+
+int Game::run(){
     int i = 0;
     string cmd = "";
 
@@ -81,7 +99,10 @@ int run_game(
             cin >> choice;
             
             if (choice == "yes") {
-                pay_fine(players[i], 100);
+            	if (player.change(-fine)){
+				    player.in_jail = false;
+				    cout << player.name << " paid a fine of $" << fine << " and is released from jail." << endl;
+				}
             } else {
                 cout << players[i].name << " chose not to pay the fine and will remain in jail." << endl;
             }
@@ -125,11 +146,11 @@ int run_game(
                     break;
                 case 5: // go
                     cout << players[i].name << " passed or landed on Go and collected $200." << endl;
-                    players[i].money += 200;
+                    players[i].change(200);
                     break;
                 case 6: // tax
                     cout << players[i].name << " paid $" << tiles[players[i].position].name << " tax!" << endl;
-                    players[i].money -= atoi(tiles[players[i].position].name.c_str());
+                    players[i].change(-atoi(tiles[players[i].position].name.c_str());)
                     break;
                 case 7: // railroad
                     // TODO: Implement railroad tile functionality
@@ -153,6 +174,11 @@ int run_game(
 	            	return 0;
 	            } else if (cmd == "next"){
 	            	break;
+	            } else if (cmd == "save"){
+	            	cout << "Please input the file name to be saved:" << endl;
+	            	string fn;
+	            	cin >> fn;
+	            	save(fn);
 	            }
         	}
 
@@ -161,4 +187,9 @@ int run_game(
             i++;
         }
     }
+}
+
+bool Game::save(string filename){
+	// saves the game to filename
+	// TODO:
 }

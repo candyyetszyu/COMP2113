@@ -20,20 +20,13 @@ int main(){
 			cout << "Please input number of players:" << endl;
 			cin >> cmd;
 
-			Player player;
-			vector<Player> players;
-			for (int i = 0; i < stoi(cmd); i++){
-				player.name = "Player " + to_string(i);
-				player.is_bot = i;  // results in is_bot = false only for the first player
-				players.push_back(player);
-			}
-			Tile tiles[40];
-			initalised_tiles(tiles);
-			vector<ChanceCard> chance_card; // TODO: add data
-
-			run_game(stoi(cmd), players, tiles, 0, chance_card);
+			Game game = new Game();
+			game.run();
 		} else if (cmd == "load"){
-			//handle loading here
+			cout << "Please input the file name to be loaded:" << endl;
+			string fn;
+			cin >> fn;
+			Game(fn);
 		} else {
 			cout << "Command \"" << cmd << "\" is invalid. Please retry." << endl;
 		}
