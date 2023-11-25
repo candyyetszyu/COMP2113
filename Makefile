@@ -12,5 +12,14 @@ rules.o: rules.cpp rules.h
 initalised_tiles.o: initalised_tiles.cpp initalised_tiles.h game.h
 	g++ $(FLAGS) -c $<
 
-main: main.o game.o rules.o initalised_tiles.o
+board.o: board.cpp board.h
+	g++ $(FLAGS) -c $<
+
+main: main.o game.o rules.o initalised_tiles.o board.o
 	g++ $(FLAGS) $^ -o $@
+
+clean:
+	rm -f *.o main
+
+.PHONY:
+	clean
