@@ -3,28 +3,27 @@
 #include "game.h"
 using namespace std;
 
-void initalised_tiles(Tile tiles[]){
+void initalised_tiles(Tile tiles[], Player& player){
   for (int i=0; i<40; i++){
-    //type0_8: go&locations with color
     
     //type_0, color_0: Chance
     if(i==7||i==36){
-      tiles[i].set(-1,0,0,12,0,12,"Chance");
+      tiles[i].set(-1,0,0,0,0,0,"Chance");
     }
 
     //type_1, color_1: Community Chest
     else if(i==2||i==17||i==33){
-      tiles[i].set(-1,0,0,10,0,10,"Community Chest");
+      tiles[i].set(-1,0,0,1,0,1,"Community Chest");
     }
       
     //type_2, color_2: Stanley Jail
     else if(i==10||i==30){
-      tiles[i].set(-1,0,0,13,0,13,"Stanley Jail");
+      tiles[i].set(-1,0,0,2,0,2,"Stanley Jail");
     } 
     
     //type_3, color_3: Free Parking
     else if(i==22){
-      tiles[i].set(-1,0,0,14,0,14,"Free Parking");
+      tiles[i].set(-1,0,0,3,0,3,"Free Parking");
     } 
 
     //type_4, color_4: property
@@ -32,36 +31,36 @@ void initalised_tiles(Tile tiles[]){
     //Chek Lap Kok, Lantau Island
     else if(i==1||i==3){
       if(i==1){
-        tiles[i].set(-1,0,0,1,600,1,"Chek Lap Kok");
+        tiles[i].set(-1,0,0,4,600,4,"Chek Lap Kok");
       }
       else{
-        tiles[i].set(-1,0,0,1,600,1,"Lantau Island");
+        tiles[i].set(-1,0,0,4,600,4,"Lantau Island");
       }
     }
 
     //Ngong Ping, Cheung Chau, Lamma Island
     else if(i==6||i==8||i==9){
       if(i==6){
-        tiles[i].set(-1,0,0,2,1000,2,"Ngong Ping");
+        tiles[i].set(-1,0,0,4,1000,4,"Ngong Ping");
       }
       else if(i==8){
-        tiles[i].set(-1,0,0,2,1000,2,"Cheung Chau");
+        tiles[i].set(-1,0,0,4,1000,4,"Cheung Chau");
       }
       else{
-        tiles[i].set(-1,0,0,2,1200,2,"Lamma Island");
+        tiles[i].set(-1,0,0,4,1200,4,"Lamma Island");
       }
     }
 
     //Lo Wu, Tin Shui Wai, Sham Tseng
     else if(i==11||i==13||i==14){
       if(i==11){
-        tiles[i].set(-1,0,0,3,1400,3,"Lo Wu");
+        tiles[i].set(-1,0,0,4,1400,4,"Lo Wu");
       }
       else if(i==13){
-        tiles[i].set(-1,0,0,3,1400,3,"Tin Shui Wai");
+        tiles[i].set(-1,0,0,4,1400,4,"Tin Shui Wai");
       }
       else{
-         tiles[i].set(-1,0,0,3,1600,3,"Sham Tseng");
+         tiles[i].set(-1,0,0,4,1600,4,"Sham Tseng");
       }
     }
     
@@ -81,105 +80,101 @@ void initalised_tiles(Tile tiles[]){
     //Lei Yue Mun, Wong Tai Sin, Kowloon Tong
     else if(i==21||i==23||i==24){
       if(i==21){
-        tiles[i].set(-1,0,0,5,2200,5,"Lei Yue Mun");
+        tiles[i].set(-1,0,0,4,2200,4,"Lei Yue Mun");
       }
       else if(i==23){
-        tiles[i].set(-1,0,0,5,2200,5,"Wong Tai Sin");
+        tiles[i].set(-1,0,0,4,2200,4,"Wong Tai Sin");
       }
       else{
-        tiles[i].set(-1,0,0,5,2400,5,"Kowloon Tong");
+        tiles[i].set(-1,0,0,4,2400,4,"Kowloon Tong");
       }
     }
 
     //Kwun Tong, Mong Kok, Tsim Sha Tsui
     else if(i==26||i==27||i==29){
       if(i==26){
-        tiles[i].set(-1,0,0,6,2600,6,"Kwun Tong");
+        tiles[i].set(-1,0,0,4,2600,4,"Kwun Tong");
       }
       else if(i==27){
-        tiles[i].set(-1,0,0,6,2600,6,"Mong Kok");
+        tiles[i].set(-1,0,0,4,2600,4,"Mong Kok");
       }
       else{
-        tiles[i].set(-1,0,0,6,2800,6,"Tsim Sha Tsui");
+        tiles[i].set(-1,0,0,4,2800,4,"Tsim Sha Tsui");
       }
     }
 
     //Causeway Bay, Cyberport, Central
     else if(i==31||i==32||i==34){
       if(i==31){
-        tiles[i].set(-1,0,0,7,3000,7,"Causeway Bay");
+        tiles[i].set(-1,0,0,4,3000,4,"Causeway Bay");
       }
       else if(i==32){
-        tiles[i].set(-1,0,0,7,3000,7,"Cyberport");
+        tiles[i].set(-1,0,0,4,3000,4,"Cyberport");
       }
       else{
-        tiles[i].set(-1,0,0,7,3200,7,"Central");
+        tiles[i].set(-1,0,0,4,3200,4,"Central");
       }
     }
 
     //Repulse Bay,The Peak
     else if(i==37||i==39){
       if(i==37){
-        tiles[i].set(-1,0,0,8,3500,8,"Repulse Bay");
+        tiles[i].set(-1,0,0,4,3500,4,"Repulse Bay");
       }
       else{
-        tiles[i].set(-1,0,0,8,4000,8,"The Peak");
+        tiles[i].set(-1,0,0,4,4000,4,"The Peak");
       }
     }
 
     //type_5, color_5: Go
     else if(i==0){
-          tiles[i].set(-1,0,0,0,-2000,0, "Go");
+          tiles[i].set(-1,0,0,5,0,5, "Go");
     }
 
     //type_6, color_6: Income Tax & Salary Tax
-    //need to amend
-    else if(i==4){
-      tiles[i].set(-1,0,0,11,0,11,"Income Tax");
-    }
-    //locations without color
 
-    //type_9, color_9: Airport Station, Hong Kong Electric, Tsing Yi Station, Kowloon Station
-    else if(i==5||i==12||i==15||i==25){
-      if(i==5){
-        tiles[i].set(-1,0,0,9,2000,9,"Airport Station");
-      }
-      else if(i==12){
-        tiles[i].set(-1,0,0,9,1500,9,"Hong Kong Electric");
-      }
-      else if(i==15){
-        tiles[i].set(-1,0,0,9,2000,9,"Tsing Yi Station");
+    //Income Tax
+    //calculate the smallest value: 10% of player money and 2000
+    else if(i==4){
+      if (player.money*0.1 <2000){
+        tiles[i].set(-1,0,0,6,player.money*0.1,6,"Income Tax");
       }
       else{
-        tiles[i].set(-1,0,0,9,2000,9,"Kowloon Station");
+        tiles[i].set(-1,0,0,6,2000,6,"Income Tax");
       }
     }
-        
-    //Functional location
-        
-    //type_10, color_10: 
-        
 
-        
-    //type_12, color_12: 
+    //Salary Tax
+    else if(i==38){
+      tiles[i].set(-1,0,0,6,750,6,"Salary Tax");
+    }
 
-    //type_13, color_13: 
+    //type_7, color_7: railroad
+    //Airport Station, Hong Kong Electric, Tsing Yi Station, Kowloon Station
+    else if(i==5||i==12||i==15||i==25){
+      if(i==5){
+        tiles[i].set(-1,0,0,7,2000,7,"Airport Station");
+      }
+      else if(i==12){
+        tiles[i].set(-1,0,0,7,1500,7,"Hong Kong Electric");
+      }
+      else if(i==15){
+        tiles[i].set(-1,0,0,7,2000,7,"Tsing Yi Station");
+      }
+      else{
+        tiles[i].set(-1,0,0,7,2000,7,"Kowloon Station");
+      }
+    }
       
-    //type_14, color_14: 
-      
-    //type_15, color_15: Provincial
+    //type_8, color_8: utility
+        
+    //Provincial
     else if(i==20){
       tiles[i].set(-1,0,0,15,0,15,"Provincial");
     } 
       
-    //type_16, color_16: Water Works
+    //Water Works
     else if(i==28){
       tiles[i].set(-1,0,0,16,1500,16,"Water Works");
     } 
-      
-    //type_17, color_17: Salary Tax
-    else if(i==38){
-      tiles[i].set(-1,0,0,17,750,17,"Salary Tax");
-    }
-  }
 }
