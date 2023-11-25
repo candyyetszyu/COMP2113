@@ -7,7 +7,7 @@
 using namespace std;
 
 void PrintBoard(const vector<Player>& players, Tile tiles[]) {
-    string boardLayout[40] = {
+    string boardLayout[45] = {
         "|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|",
         "|    Free    |   Lei Yue  |            |    Wong    |   Kowloon  |  Kowloon   |    Kwun    |            |   Water    |  Tsim Sha  |            |",
         "|  Parking   |     Mun    | Provincial |  Tai Sin   |    Tong    |  station   |    Tong    |  Mong Kok  |   Works    |    Tsui    | Go to Jail |",
@@ -55,6 +55,7 @@ void PrintBoard(const vector<Player>& players, Tile tiles[]) {
         "|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|"
     };
 
+    /*
     // Clear player positions
     for (int i = 0; i < 40; ++i) {
         tiles[i].players.clear();
@@ -64,6 +65,7 @@ void PrintBoard(const vector<Player>& players, Tile tiles[]) {
     for (const auto& player : players) {
         tiles[player.position].players.push_back(player.name);
     }
+    */
 
     // Print the board
     for (const auto& line : boardLayout) {
@@ -80,8 +82,8 @@ void PrintBoard(const vector<Player>& players, Tile tiles[]) {
 
             // Print the number of houses and hotels
             cout << " (Owner: " << owner.name;
-            cout << ", Houses: " << tiles[i].num_houses;
-            cout << ", Hotels: " << tiles[i].num_hotels;
+            cout << ", Houses: " << tiles[i].houses;
+            cout << ", Hotels: " << tiles[i].hotels;
             cout << ")";
         }
         cout << endl;

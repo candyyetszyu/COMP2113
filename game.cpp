@@ -57,8 +57,6 @@ void pay_fine(Player& player, int fine) {
     cout << player.name << " paid a fine of $" << fine << " and is released from jail." << endl;
 }
 
-void PrintBoard(const vector<Player>& players, Tile tiles[]);
-
 int run_game(
         int n,
         vector<Player> players,

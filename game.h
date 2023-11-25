@@ -15,13 +15,13 @@ struct Player {
 struct Tile {
     int owner = -1; // int representing the i-th owner in vector<Player> players, -1 when no owner
     int houses = 0; // number of houses on the plot
-    int hotel = 0; // number of hotels on the plot
+    int hotels = 0; // number of hotels on the plot
     int type; // type of tile
     int price; //price
     int group; //color
     std::string name = "";
     void set(int a, int b, int c, int d, int e, int f, std::string g){
-    	owner = a; houses = b; hotel = c; type = d; price = e; group = f; name = g;
+    	owner = a; houses = b; hotels = c; type = d; price = e; group = f; name = g;
     };
 };
 
