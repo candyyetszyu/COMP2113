@@ -5,6 +5,7 @@
 #include<algorithm>
 
 #include "rules.h"
+#include "board.h"
 #include "initalised_tiles.h"
 
 using namespace std;
@@ -56,6 +57,8 @@ void pay_fine(Player& player, int fine) {
     cout << player.name << " paid a fine of $" << fine << " and is released from jail." << endl;
 }
 
+void PrintBoard(const vector<Player>& players, Tile tiles[]);
+
 int run_game(
         int n,
         vector<Player> players,
@@ -68,6 +71,8 @@ int run_game(
 
     // shuffle the chance card stack before starting the game
     random_shuffle(chance_card.begin(), chance_card.end());
+
+    PrintBoard(players, tiles);
 
     while (true) {
         if (players[i].in_jail) {
@@ -136,6 +141,8 @@ int run_game(
                     break;
             }
         }
+
+        PrintBoard(players, tiles);
 
         if (i + 1 == n) {
             // end round
