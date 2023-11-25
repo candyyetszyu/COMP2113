@@ -6,50 +6,67 @@
 
 using namespace std;
 
-void PrintBoard(vector<player> x){
-    cout << "|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|" << endl;
-    cout << "|    Free    |   Lei Yue  |            |    Wong    |   Kowloon  |  Kowloon   |    Kwun    |            |   Water    |  Tsim Sha  |            |" << endl;
-    cout << "|  Parking   |     Mun    | Provincial |  Tai Sin   |    Tong    |  station   |    Tong    |  Mong Kok  |   Works    |    Tsui    | Go to Jail |" << endl;
-    cout << "|            |            |            |            |            |            |            |            |            |            |            |" << endl;
-    cout << "|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|" << endl;
-    cout << "|   Tseung   |                                                                                                                    |  Causeway  |" << endl;
-    cout << "|   Kwan O   |                                                                                                                    |     Bay    |" << endl;
-    cout << "|            |                                                                                                                    |            |" << endl;
-    cout << "|------------|                                                                                                                    |------------|" << endl;
-    cout << "|            |                                                                                                                    |            |" << endl;
-    cout << "|  Sha Tin   |                                                                                                                    | Cyberport  |" << endl;
-    cout << "|            |                                                                                                                    |            |" << endl;
-    cout << "|------------|                                                                                                                    |------------|" << endl;
-    cout << "|            |                                                                                                                    |            |" << endl;
-    cout << "| Community  |                                                                                                                    |  Community |" << endl;
-    cout << "|   Chest    |                                                                                                                    |    Chest   |" << endl;
-    cout << "|------------|                                                                                                                    |------------|" << endl;
-    cout << "|            |                                                                                                                    |            |" << endl;
-    cout << "|    Kwai    |                                                                                                                    |   Central  |" << endl;
-    cout << "|   Chung    |                                                                                                                    |            |" << endl;
-    cout << "|------------|                                                                                                                    |------------|" << endl;
-    cout << "|            |                                                                                                                    |            |" << endl;
-    cout << "|  Tsing Yi  |                                                                                                                    |  Hong Kong |" << endl;
-    cout << "|  station   |                                                                                                                    |   statoin  |" << endl;
-    cout << "|------------|                                                                                                                    |------------|" << endl;
-    cout << "|            |                                                                                                                    |            |" << endl;
-    cout << "|   Sham     |                                                                                                                    |   Chance   |" << endl;
-    cout << "|   Tseng    |                                                                                                                    |            |" << endl;
-    cout << "|------------|                                                                                                                    |------------|" << endl;
-    cout << "|            |                                                                                                                    |            |" << endl;
-    cout << "|  Tin Shui  |                                                                                                                    |   Repulse  |" << endl;
-    cout << "|    Wai     |                                                                                                                    |     Bay    |" << endl;
-    cout << "|------------|                                                                                                                    |------------|" << endl;
-    cout << "|            |                                                                                                                    |            |" << endl;
-    cout << "|  Hongkong  |                                                                                                                    | Salary Tax |" << endl;
-    cout << "|  Electric  |                                                                                                                    |            |" << endl;
-    cout << "|------------|                                                                                                                    |------------|" << endl;
-    cout << "|            |                                                                                                                    |            |" << endl;
-    cout << "|   Lo Wu    |                                                                                                                    |  The Peak  |" << endl;
-    cout << "|            |                                                                                                                    |            |" << endl;
-    cout << "|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|" << endl;
-    cout << "|            |            |            |            |            |            |            |            |            |            |            |" << endl;
-    cout << "|    Jail    |    Lamma   |   Cheung   |   Chance   |    Ngong   |  Airport   |   Income   |   Lantau   |  Community |  Chek Lap  |     Go     |" << endl;
-    cout << "|            |   Island   |    Chau    |            |    Ping    |  station   |    Tax     |   Island   |    Chest   |     Kok    |            |" << endl;
-    cout << "|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|" << endl;
+void PrintBoard(const vector<Player>& players, Tile tiles[]) {
+    string boardLayout[40] = {
+        "|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|",
+        "|    Free    |   Lei Yue  |            |    Wong    |   Kowloon  |  Kowloon   |    Kwun    |            |   Water    |  Tsim Sha  |            |",
+        "|  Parking   |     Mun    | Provincial |  Tai Sin   |    Tong    |  station   |    Tong    |  Mong Kok  |   Works    |    Tsui    | Go to Jail |",
+        "|            |            |            |            |            |            |            |            |            |            |            |",
+        "|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|",
+        "|   Tseung   |                                                                                                                    |  Causeway  |",
+        "|   Kwan O   |                                                                                                                    |     Bay    |",
+        "|            |                                                                                                                    |            |",
+        "|------------|                                                                                                                    |------------|",
+        "|            |                                                                                                                    |            |",
+        "|  Sha Tin   |                                                                                                                    | Cyberport  |",
+        "|            |                                                                                                                    |            |",
+        "|------------|                                                                                                                    |------------|",
+        "|            |                                                                                                                    |            |",
+        "|  Community |                                                                                                                    | Community  |",
+        "|   Chest    |                                                                                                                    |   Chest    |",
+        "|------------|                                                                                                                    |------------|",
+        "|            |                                                                                                                    |            |",
+        "|    Kwai    |                                                                                                                    |   Central  |",
+        "|   Chung    |                                                                                                                    |            |",
+        "|------------|                                                                                                                    |------------|",
+        "|            |                                                                                                                    |            |",
+        "|  Tsing Yi  |                                                                                                                    |  Hong Kong |",
+        "|  station   |                                                                                                                    |   statoin  |",
+        "|------------|                                                                                                                    |------------|",
+        "|            |                                                                                                                    |            |",
+        "|   Sham     |                                                                                                                    |   Chance   |",
+        "|   Tseng    |                                                                                                                    |            |",
+        "|------------|                                                                                                                    |------------|",
+        "|            |                                                                                                                    |            |",
+        "|  Tin Shui  |                                                                                                                    |   Repulse  |",
+        "|    Wai     |                                                                                                                    |     Bay    |",
+        "|------------|                                                                                                                    |------------|",
+        "|            |                                                                                                                    |            |",
+        "|  Hongkong  |                                                                                                                    | Salary Tax |",
+        "|  Electric  |                                                                                                                    |            |",
+        "|------------|                                                                                                                    |------------|",
+        "|            |                                                                                                                    |            |",
+        "|   Lo Wu    |                                                                                                                    |  The Peak  |",
+        "|            |                                                                                                                    |            |",
+        "|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|",
+        "|            |            |            |            |            |            |            |            |            |            |            |",
+        "|    Jail    |    Lamma   |   Cheung   |   Chance   |    Ngong   |  Airport   |   Income   |   Lantau   |  Community |  Chek Lap  |     Go     |",
+        "|            |   Island   |    Chau    |            |    Ping    |  station   |    Tax     |   Island   |    Chest   |     Kok    |            |",
+        "|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|"
+    };
+
+    // Clear player positions
+    for (int i = 0; i < 40; ++i) {
+        tiles[i].players.clear();
+    }
+
+    // Update the board layout with player positions
+    for (const auto& player : players) {
+        tiles[player.position].players.push_back(player.name);
+    }
+
+    // Print the board
+    for (const auto& line : boardLayout) {
+        std::cout << line << std::endl;
+    }
 }

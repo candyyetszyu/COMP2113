@@ -2,6 +2,6 @@
 
 #define BOARD_H
 
-void PrintBoard(const std::vector<player>);
+void PrintBoard(const vector<Player>& players, Tile tiles[]);
 
 #endif
