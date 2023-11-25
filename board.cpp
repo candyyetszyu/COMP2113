@@ -67,6 +67,23 @@ void PrintBoard(const vector<Player>& players, Tile tiles[]) {
 
     // Print the board
     for (const auto& line : boardLayout) {
-        std::cout << line << std::endl;
+        cout << line << endl;
+    }
+
+    for (int i = 0; i < tile_size; i++) {
+        cout << tiles[i].name;
+
+        // Check if the tile is a property and a player owns it
+        if (tiles[i].type == 4 && tiles[i].owner != -1) {
+            int ownerIndex = tiles[i].owner;
+            const Player& owner = players[ownerIndex];
+
+            // Print the number of houses and hotels
+            cout << " (Owner: " << owner.name;
+            cout << ", Houses: " << tiles[i].num_houses;
+            cout << ", Hotels: " << tiles[i].num_hotels;
+            cout << ")";
+        }
+        cout << endl;
     }
 }
