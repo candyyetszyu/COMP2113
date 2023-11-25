@@ -3,7 +3,7 @@
 #include "game.h"
 using namespace std;
 
-void initalised_tiles(Tile tiles[], Player& player){
+void initalised_tiles(Tile tiles[]){
   for (int i=0; i<40; i++){
     
     //type_0, color_0: Chance
@@ -134,14 +134,8 @@ void initalised_tiles(Tile tiles[], Player& player){
     //type_6, color_6: Income Tax & Salary Tax
 
     //Income Tax
-    //calculate the smallest value: 10% of player money and 2000
     else if(i==4){
-      if (player.money*0.1 <2000){
-        tiles[i].set(-1,0,0,6,player.money*0.1,6,"Income Tax");
-      }
-      else{
-        tiles[i].set(-1,0,0,6,2000,6,"Income Tax");
-      }
+      tiles[i].set(-1,0,0,6,0,6,"Income Tax");
     }
 
     //Salary Tax
@@ -177,4 +171,5 @@ void initalised_tiles(Tile tiles[], Player& player){
     else if(i==28){
       tiles[i].set(-1,0,0,16,1500,16,"Water Works");
     } 
+  }
 }
