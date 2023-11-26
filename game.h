@@ -4,17 +4,6 @@
 
 const int tile_size = 40;
 
-struct Player {
-    int money = 0; // amount of money the player has
-    int position = 0; // position of the player on the board, integer between 0 and 39
-    std::string name = ""; // name of player
-    bool in_jail = false; // whether player is in jail or not
-    bool is_bot;
-    bool change(int amount);
-    void buyProperty(Tile& tile, int playerIndex);
-    void sellProperty(Tile& tile);
-};
-
 struct Tile {
     int owner = -1; // int representing the i-th owner in vector<Player> players, -1 when no owner
     int houses = 0; // number of houses on the plot
@@ -26,6 +15,17 @@ struct Tile {
     void set(int a, int b, int c, int d, int e, int f, std::string g){
     	owner = a; houses = b; hotels = c; type = d; price = e; group = f; name = g;
     };
+};
+
+struct Player {
+    int money = 0; // amount of money the player has
+    int position = 0; // position of the player on the board, integer between 0 and 39
+    std::string name = ""; // name of player
+    bool in_jail = false; // whether player is in jail or not
+    bool is_bot;
+    bool change(int amount);
+    void buyProperty(Tile& tile, int playerIndex);
+    void sellProperty(Tile& tile);
 };
 
 enum class ChanceCardType {
@@ -43,14 +43,15 @@ struct ChanceCard {
 
 struct Game{
     int n;
+    int free_parking;
     std::vector<Player> players;
     Tile tiles[40];
-    int free_parking;
     std::vector<ChanceCard> chance_card;
     int run();
-    Game();
+    Game(int n);
     Game(std::string filename);
-    bool save(std::string filename);
+    void save(std::string filename);
+    bool bad_load = false; // used when error in loading save game
 };
 
 #endif

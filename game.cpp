@@ -3,6 +3,8 @@
 #include<cstdlib>
 #include<vector>
 #include<algorithm>
+#include<fstream>
+#include<sstream>
 
 #include "rules.h"
 #include "board.h"
@@ -15,7 +17,7 @@ bool Player::change(int amount){
 	// returns true when succeed, false when fail
 	money += amount;
 	if (money < 0){
-		cout << name << " has run out of funds."
+		cout << name << " has run out of funds.";
 		// TODO: add mortgage handling
 	}
 	return true;
@@ -95,23 +97,92 @@ void Player::sellProperty(Tile& tile) {
     }
 }
 
-Game::Game(){
+Game::Game(int n){
 	//game initialisation for new game
+	bad_load = false;
+
 	Player player;
-    for (int i = 0; i < stoi(cmd); i++){
+    for (int i = 0; i < n; i++){
         player.name = "Player " + to_string(i);
         player.is_bot = i;  // results in is_bot = false only for the first player
         players.push_back(player);
     }
     initalised_tiles(tiles);
+    free_parking = 0;
+    n = n;
 }
 
 Game::Game(string filename){
-	//load game from file
-	// TODO
+	// load game from file
+	ifstream fin;
+	fin.open(filename);
+	bad_load = false;
+
+	try{
+		string word, w;
+		fin >> word; n = stoi(word);
+		fin >> word; free_parking = stoi(word);
+
+		Player player;
+		for (int i=0; i<n; i++){
+			getline(fin, word);
+			istringstream iss(word);
+			iss >> w; player.money = stoi(w);
+			iss >> w; player.position = stoi(w);
+			iss >> w; player.name = w;
+			iss >> w; player.in_jail = stoi(w);
+			iss >> w; player.is_bot = stoi(w);
+			players.push_back(player);
+		}
+
+		for (int i=0; i<40; i++){
+			getline(fin, word);
+			istringstream iss(word);
+			iss >> w; tiles[i].owner = stoi(w);
+			iss >> w; tiles[i].houses = stoi(w);
+			iss >> w; tiles[i].hotels = stoi(w);
+			iss >> w; tiles[i].type = stoi(w);
+			iss >> w; tiles[i].price = stoi(w);
+			iss >> w; tiles[i].group = stoi(w);
+			getline(iss, w); tiles[i].name = w;
+			players.push_back(player);
+		}
+
+		getline(fin, word);
+		ChanceCard cc;
+		for (int i=0; i<word.size(); i++){
+			switch(word[i]){
+				case 1:
+					cc.type = ChanceCardType::AdvanceToGo;
+					break;
+	    		case 2:
+	    			cc.type = ChanceCardType::GoToJail;
+					break;
+	    		case 3:
+	    			cc.type = ChanceCardType::GoBackThreeSpaces;
+					break;
+	    		case 4:
+	    			cc.type = ChanceCardType::PayEveryone;
+					break;
+	    		case 5:
+	    			cc.type = ChanceCardType::PayBank;
+					break;
+				default:
+					bad_load = true;
+			}
+			chance_card.push_back(cc);
+		}
+	} catch (...){
+		cout << "Error in loading game." << endl;
+		bad_load = true;
+	}
 }
 
 int Game::run(){
+	if (bad_load){
+		return 0;
+	}
+
     int i = 0;
     string cmd = "";
 
@@ -129,9 +200,9 @@ int Game::run(){
             cin >> choice;
             
             if (choice == "yes") {
-            	if (player.change(-fine)){
-				    player.in_jail = false;
-				    cout << player.name << " paid a fine of $" << fine << " and is released from jail." << endl;
+            	if (players[i].change(-100)){
+				    players[i].in_jail = false;
+				    cout << players[i].name << " paid a fine of $100 and is released from jail." << endl;
 				}
             } else {
                 cout << players[i].name << " chose not to pay the fine and will remain in jail." << endl;
@@ -202,12 +273,13 @@ int Game::run(){
                                 players[i].buyProperty(tiles[players[i].position], i);
                             }
                         } else {
-                        std::string buy;
-                        std::cout << players[i].name << ", do you want to buy this property? (yes/no)\n";
-                        std::cin >> buy;
-                        if (buy == "yes") {
-                            players[i].buyProperty(tiles[players[i].position], i);
-                        }
+	                        std::string buy;
+	                        std::cout << players[i].name << ", do you want to buy this property? (yes/no)\n";
+	                        std::cin >> buy;
+	                        if (buy == "yes") {
+	                            players[i].buyProperty(tiles[players[i].position], i);
+	                        }
+	                    }
                     }
                         // If the property is owned by another player, the current player must pay rent
                     else if (tiles[players[i].position].owner != i && tiles[players[i].position].owner != -1) {
@@ -220,7 +292,7 @@ int Game::run(){
                     break;
                 case 6: // tax
                     cout << players[i].name << " paid $" << tiles[players[i].position].name << " tax!" << endl;
-                    players[i].change(-atoi(tiles[players[i].position].name.c_str());)
+                    players[i].change(tiles[players[i].position].price);
                     break;
                 case 7: // railroad
                     // TODO: Implement railroad tile functionality
@@ -259,7 +331,49 @@ int Game::run(){
     }
 }
 
-bool Game::save(string filename){
+void Game::save(string filename){
 	// saves the game to filename
-	// TODO:
+	ofstream fout;
+	fout.open(filename);
+
+	if (fout.fail()){
+		cout << "error in saving game" << endl;
+	}
+
+	fout << n << endl;
+	fout << free_parking << endl;
+
+	// save data of players
+	vector<Player>::iterator ip;
+	for (ip = players.begin(); ip != players.end(); ip++){
+		fout << ip->money << " " << ip->position << " " << ip->name << " " << int(ip->in_jail) << " " << int(ip->is_bot) << endl;
+	}
+
+	// save data of tiles
+	for (int i=0; i < tile_size; i++){
+		fout << tiles[i].owner << " " << tiles[i].houses << " " << tiles[i].hotels << " " << tiles[i].type << " " << tiles[i].price << " " << tiles[i].group << " " << tiles[i].name << endl;
+	}
+
+	// save data of chance cards
+	vector<ChanceCard>::iterator ic;
+	for (ic = chance_card.begin(); ic != chance_card.end(); ic++){
+		switch(ic->type){
+			case ChanceCardType::AdvanceToGo:
+				fout << 1;
+				break;
+    		case ChanceCardType::GoToJail:
+				fout << 2;
+				break;
+    		case ChanceCardType::GoBackThreeSpaces:
+				fout << 3;
+				break;
+    		case ChanceCardType::PayEveryone:
+				fout << 4;
+				break;
+    		case ChanceCardType::PayBank:
+				fout << 5;
+				break;
+		}
+	}
+	fout.close();
 }

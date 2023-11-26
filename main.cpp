@@ -20,13 +20,14 @@ int main(){
 			cout << "Please input number of players:" << endl;
 			cin >> cmd;
 
-			Game game = new Game();
+			Game game(stoi(cmd));
 			game.run();
 		} else if (cmd == "load"){
 			cout << "Please input the file name to be loaded:" << endl;
 			string fn;
 			cin >> fn;
-			Game(fn);
+			Game game(fn);
+			game.run();
 		} else {
 			cout << "Command \"" << cmd << "\" is invalid. Please retry." << endl;
 		}
