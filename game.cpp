@@ -97,12 +97,12 @@ void Player::sellProperty(Tile& tile) {
     }
 }
 
-Game::Game(int n){
+Game::Game(int number_of_players){
 	//game initialisation for new game
 	bad_load = false;
 
 	Player player;
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < number_of_players; i++){
     	if (i){
         	player.name = "Player " + to_string(i);
         } else {
@@ -117,7 +117,7 @@ Game::Game(int n){
 
     initialise_tiles(tiles);
     free_parking = 0;
-    n = n;
+    n = number_of_players;
 }
 
 Game::Game(string filename){
