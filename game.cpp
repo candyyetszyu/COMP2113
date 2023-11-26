@@ -108,14 +108,26 @@ int Game::run(){
             }
         } else {
             // Ask the player if they want to sell any properties
-            std::string sell;
-            std::cout << players[i].name << ", do you want to sell any properties? (yes/no)\n";
-            std::cin >> sell;
-            if (sell == "yes") {
-                int propertyIndex;
-                std::cout << "Enter the index of the property you want to sell:\n";
-                std::cin >> propertyIndex;
-                players[i].sellProperty(tiles[propertyIndex]);
+            if (players[i].is_bot) {
+                // Bot: sell a property if money is less than $500
+                if (players[i].money < 500) {
+                    for (int j = 0; j < tile_size; ++j) {
+                        if (tiles[j].owner == i) {
+                            players[i].sellProperty(tiles[j]);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                std::string sell;
+                std::cout << players[i].name << ", do you want to sell any properties? (yes/no)\n";
+                std::cin >> sell;
+                if (sell == "yes") {
+                    int propertyIndex;
+                    std::cout << "Enter the index of the property you want to sell:\n";
+                    std::cin >> propertyIndex;
+                    players[i].sellProperty(tiles[propertyIndex]);
+                }
             }
             // roll dice
             int dice1 = rand() % 6 + 1;
@@ -154,6 +166,12 @@ int Game::run(){
                 case 4: // property
                     // If the property is unowned, ask the player if they want to buy it
                     if (tiles[players[i].position].owner == -1) {
+                        if (players[i].is_bot) {
+                            // Bot: buy the property if money is more than $1000
+                            if (players[i].money > 1000) {
+                                players[i].buyProperty(tiles[players[i].position], i);
+                            }
+                        } else {
                         std::string buy;
                         std::cout << players[i].name << ", do you want to buy this property? (yes/no)\n";
                         std::cin >> buy;
