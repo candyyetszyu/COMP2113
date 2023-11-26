@@ -223,11 +223,65 @@ int Game::run(){
                     players[i].change(-atoi(tiles[players[i].position].name.c_str());)
                     break;
                 case 7: // railroad
-                    // TODO: Implement railroad tile functionality
-                    break;
-                case 8: // utility
-                    // TODO: Implement utility tile functionality
-                    break;
+		    // Check if the railroad is owned by another player
+		    if (tiles[players[i].position].owner != -1 && tiles[players[i].position].owner != i) {
+		        // Calculate the rent based on the number of railroads owned by the owner
+		        int numRailroads = 0;
+		        for (int j = 0; j < tile_size; ++j) {
+		            if (tiles[j].type == 7 && tiles[j].owner == tiles[players[i].position].owner) {
+		                numRailroads++;
+		            }
+		        }
+		        int rentAmount = railroad_rent[numRailroads - 1]; // Rent amount based on the number of railroads owned
+		        cout << players[i].name << " paid $" << rentAmount << " as rent to " << players[tiles[players[i].position].owner].name << "." << endl;
+		        players[i].change(-rentAmount);
+		        players[tiles[players[i].position].owner].change(rentAmount);
+		    }
+		    // If the railroad is unowned, ask the player if they want to buy it
+		    else if (tiles[players[i].position].owner == -1) {
+		        if (players[i].is_bot) {
+		            // Bot: buy the railroad if money is more than $1000
+		            if (players[i].money > 1000) {
+		                players[i].buyProperty(tiles[players[i].position], i);
+		            }
+		        } else {
+		            std::string buy;
+		            std::cout << players[i].name << ", do you want to buy this railroad? (yes/no)\n";
+		            std::cin >> buy;
+		            if (buy == "yes") {
+		                players[i].buyProperty(tiles[players[i].position], i);
+		            }
+		        }
+		    }
+		    break;
+		
+		case 8: // utility
+		    // Check if the utility is owned by another player
+		    if (tiles[players[i].position].owner != -1 && tiles[players[i].position].owner != i) {
+		        // Calculate the rent based on the roll of the dice
+		        int diceSum = dice1 + dice2;
+		        int rentAmount = (diceSum == 12) ? 10 * diceSum : 4 * diceSum; // Rent amount based on the roll of the dice
+		        cout << players[i].name << " paid $" << rentAmount << " as rent to " << players[tiles[players[i].position].owner].name << "." << endl;
+		        players[i].change(-rentAmount);
+		        players[tiles[players[i].position].owner].change(rentAmount);
+		    }
+		    // If the utility is unowned, ask the player if they want to buy it
+		    else if (tiles[players[i].position].owner == -1) {
+		        if (players[i].is_bot) {
+		            // Bot: buy the utility if money is more than $1000
+		            if (players[i].money > 1000) {
+		                players[i].buyProperty(tiles[players[i].position], i);
+		            }
+		        } else {
+		            std::string buy;
+		            std::cout << players[i].name << ", do you want to buy this utility? (yes/no)\n";
+		            std::cin >> buy;
+		            if (buy == "yes") {
+		                players[i].buyProperty(tiles[players[i].position], i);
+		            }
+		        }
+		    }
+		    break;
             }
         }
 
