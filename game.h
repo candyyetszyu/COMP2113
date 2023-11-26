@@ -11,6 +11,35 @@ struct Player {
     bool in_jail = false; // whether player is in jail or not
     bool is_bot;
     bool change(int amount);
+    void buyProperty(Tile& tile, int playerIndex) {
+        if (tile.type != 4 && tile.type != 7 && tile.type != 8) {
+            std::cout << "This tile is not buyable.\n";
+            return;
+        }
+        if (tile.owner != -1) {
+            std::cout << "This property is already owned by another player.\n";
+            return;
+        }
+        if (money >= tile.price) {
+            tile.owner = playerIndex;
+            money -= tile.price;
+        } else {
+            std::cout << "Not enough money to buy this property.\n";
+        }
+    }
+
+    void sellProperty(Tile& tile) {
+        if (tile.type != 4 && tile.type != 7 && tile.type != 8) {
+            std::cout << "This tile is not sellable.\n";
+            return;
+        }
+        if (tile.owner == position) {
+            tile.owner = -1;
+            money += tile.price / 2;
+        } else {
+            std::cout << "You don't own this property.\n";
+        }
+    }
 };
 
 struct Tile {

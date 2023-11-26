@@ -107,6 +107,16 @@ int Game::run(){
                 cout << players[i].name << " chose not to pay the fine and will remain in jail." << endl;
             }
         } else {
+            // Ask the player if they want to sell any properties
+            std::string sell;
+            std::cout << players[i].name << ", do you want to sell any properties? (yes/no)\n";
+            std::cin >> sell;
+            if (sell == "yes") {
+                int propertyIndex;
+                std::cout << "Enter the index of the property you want to sell:\n";
+                std::cin >> propertyIndex;
+                players[i].sellProperty(tiles[propertyIndex]);
+            }
             // roll dice
             int dice1 = rand() % 6 + 1;
             int dice2 = rand() % 6 + 1;
@@ -142,7 +152,19 @@ int Game::run(){
                     // Nothing happens, player's turn ends.
                     break;
                 case 4: // property
-                    // TODO: Implement property tile functionality
+                    // If the property is unowned, ask the player if they want to buy it
+                    if (tiles[players[i].position].owner == -1) {
+                        std::string buy;
+                        std::cout << players[i].name << ", do you want to buy this property? (yes/no)\n";
+                        std::cin >> buy;
+                        if (buy == "yes") {
+                            players[i].buyProperty(tiles[players[i].position], i);
+                        }
+                    }
+                        // If the property is owned by another player, the current player must pay rent
+                    else if (tiles[players[i].position].owner != i && tiles[players[i].position].owner != -1) {
+                        // TODO: Implement rent payment
+                    }
                     break;
                 case 5: // go
                     cout << players[i].name << " passed or landed on Go and collected $200." << endl;
