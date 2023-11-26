@@ -31,7 +31,7 @@ void PrintBoard(const vector<Player>& players, Tile tiles[]) {
         "|------------|                                                                                                                    |------------|",
         "|            |                                                                                                                    |            |",
         "|  Tsing Yi  |                                                                                                                    |  Hong Kong |",
-        "|  station   |                                                                                                                    |   statoin  |",
+        "|  station   |                                                                                                                    |   station  |",
         "|------------|                                                                                                                    |------------|",
         "|            |                                                                                                                    |            |",
         "|   Sham     |                                                                                                                    |   Chance   |",

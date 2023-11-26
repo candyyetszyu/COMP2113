@@ -9,13 +9,13 @@ main.o: main.cpp game.h rules.h
 rules.o: rules.cpp rules.h
 	g++ $(FLAGS) -c $<
 
-initalised_tiles.o: initalised_tiles.cpp initalised_tiles.h game.h
+initialise_tiles.o: initialise_tiles.cpp initialise_tiles.h game.h
 	g++ $(FLAGS) -c $<
 
 board.o: board.cpp board.h
 	g++ $(FLAGS) -c $<
 
-main: main.o game.o rules.o initalised_tiles.o board.o
+main: main.o game.o rules.o initialise_tiles.o board.o
 	g++ $(FLAGS) $^ -o $@
 
 clean:

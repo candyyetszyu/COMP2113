@@ -8,7 +8,7 @@
 
 #include "rules.h"
 #include "board.h"
-#include "initalised_tiles.h"
+#include "initialise_tiles.h"
 
 using namespace std;
 
@@ -107,7 +107,7 @@ Game::Game(int n){
         player.is_bot = i;  // results in is_bot = false only for the first player
         players.push_back(player);
     }
-    initalised_tiles(tiles);
+    initialise_tiles(tiles);
     free_parking = 0;
     n = n;
 }
@@ -304,7 +304,7 @@ int Game::run(){
 		                numRailroads++;
 		            }
 		        }
-		        int rentAmount = railroad_rent[numRailroads - 1]; // Rent amount based on the number of railroads owned
+		        int rentAmount = 50 * numRailroads ; // Rent amount based on the number of railroads owned
 		        cout << players[i].name << " paid $" << rentAmount << " as rent to " << players[tiles[players[i].position].owner].name << "." << endl;
 		        players[i].change(-rentAmount);
 		        players[tiles[players[i].position].owner].change(rentAmount);

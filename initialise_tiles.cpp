@@ -1,9 +1,9 @@
 #include<iostream>
-#include "initalised_tiles.h"
+#include "initialise_tiles.h"
 #include "game.h"
 using namespace std;
 
-void initalised_tiles(Tile tiles[]){
+void initialise_tiles(Tile tiles[]){
   for (int i=0; i<40; i++){
     
     //type_0, color_0: Chance
