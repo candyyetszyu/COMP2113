@@ -9,6 +9,7 @@ using namespace std;
 
 int main(){
 	string cmd = "";
+	bool bad_input = false;
 
 	while (true){
 		cout << "Enter command: quit/play/load:" <<endl;
@@ -16,8 +17,19 @@ int main(){
 		if (cmd == "quit"){
 			return 0;
 		} else if (cmd == "play"){
-			cout << "Please input number of players:" << endl;
-			cin >> cmd;
+			while (true){
+				cout << "Please input number of players: (integer between 2-6)" << endl;
+				cin >> cmd;
+				for(int i=0; i<cmd.size(); i++){
+					if (!isdigit(cmd[i])){
+						bad_input = true;
+					}
+				}
+				if (bad_input==false && stoi(cmd) >=2 && stoi(cmd) <=6){
+					break;
+				}
+				bad_input = false;
+			}
 
 			Game game(stoi(cmd));
 			game.run();

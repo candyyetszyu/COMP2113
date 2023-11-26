@@ -103,10 +103,18 @@ Game::Game(int n){
 
 	Player player;
     for (int i = 0; i < n; i++){
-        player.name = "Player " + to_string(i);
+    	if (i){
+        	player.name = "Player " + to_string(i);
+        } else {
+        	string cmd;
+	        cout << "What is your name?" << endl;
+	        cin >> cmd;
+	        player.name = cmd;
+        }
         player.is_bot = i;  // results in is_bot = false only for the first player
         players.push_back(player);
     }
+
     initialise_tiles(tiles);
     free_parking = 0;
     n = n;
@@ -129,9 +137,9 @@ Game::Game(string filename){
 			istringstream iss(word);
 			iss >> w; player.money = stoi(w);
 			iss >> w; player.position = stoi(w);
-			iss >> w; player.name = w;
 			iss >> w; player.in_jail = stoi(w);
 			iss >> w; player.is_bot = stoi(w);
+			getline(iss, w); player.name = w;
 			players.push_back(player);
 		}
 
@@ -400,7 +408,7 @@ void Game::save(string filename){
 	// save data of players
 	vector<Player>::iterator ip;
 	for (ip = players.begin(); ip != players.end(); ip++){
-		fout << ip->money << " " << ip->position << " " << ip->name << " " << int(ip->in_jail) << " " << int(ip->is_bot) << endl;
+		fout << ip->money << " " << ip->position << " " << int(ip->in_jail) << " " << int(ip->is_bot) << " " << ip->name << endl;
 	}
 
 	// save data of tiles
