@@ -1,15 +1,15 @@
 FLAGS = -pedantic-errors -std=c++11
 
-game.o: game.cpp game.h rules.h
+game.o: game.cpp game.h rules.o
 	g++ $(FLAGS) -c $<
 
-main.o: main.cpp game.h rules.h
+main.o: main.cpp game.h rules.o
 	g++ $(FLAGS) -c $<
 
 rules.o: rules.cpp rules.h
 	g++ $(FLAGS) -c $<
 
-initialise_tiles.o: initialise_tiles.cpp initialise_tiles.h game.h
+initialise_tiles.o: initialise_tiles.cpp initialise_tiles.h game.o
 	g++ $(FLAGS) -c $<
 
 board.o: board.cpp board.h
