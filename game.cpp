@@ -65,6 +65,36 @@ void apply_chance_card_effect(Player& player, const ChanceCard& card, Tile tiles
     }
 }
 
+void Player::buyProperty(Tile& tile, int playerIndex) {
+    if (tile.type != 4 && tile.type != 7 && tile.type != 8) {
+        std::cout << "This tile is not buyable.\n";
+        return;
+    }
+    if (tile.owner != -1) {
+        std::cout << "This property is already owned by another player.\n";
+        return;
+    }
+    if (money >= tile.price) {
+        tile.owner = playerIndex;
+        money -= tile.price;
+    } else {
+        std::cout << "Not enough money to buy this property.\n";
+    }
+}
+
+void Player::sellProperty(Tile& tile) {
+    if (tile.type != 4 && tile.type != 7 && tile.type != 8) {
+        std::cout << "This tile is not sellable.\n";
+        return;
+    }
+    if (tile.owner == position) {
+        tile.owner = -1;
+        money += tile.price / 2;
+    } else {
+        std::cout << "You don't own this property.\n";
+    }
+}
+
 Game::Game(){
 	//game initialisation for new game
 	Player player;
