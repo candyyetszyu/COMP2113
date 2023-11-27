@@ -18,12 +18,12 @@ void initialise_tiles(Tile tiles[]){
       
     //type_2, color_2: Stanley Jail
     else if(i==10||i==30){
-      tiles[i].set(-1,0,0,2,0,2,"Stanley Jail");
+      tiles[i].set(-1,0,0,2,0,0,"Stanley Jail");
     } 
     
     //type_3, color_3: Free Parking
     else if(i==22){
-      tiles[i].set(-1,0,0,3,0,3,"Free Parking");
+      tiles[i].set(-1,0,0,3,0,0,"Free Parking");
     } 
 
     //type_4, color_4: property
@@ -128,35 +128,33 @@ void initialise_tiles(Tile tiles[]){
 
     //type_5, color_5: Go
     else if(i==0){
-          tiles[i].set(-1,0,0,5,0,5, "Go");
+          tiles[i].set(-1,0,0,5,0,0, "Go");
     }
 
     //type_6, color_6: Income Tax & Salary Tax
 
     //Income Tax
     else if(i==4){
-      tiles[i].set(-1,0,0,6,0,6,"Income Tax");
+      tiles[i].set(-1,0,0,6,0,0,"Income Tax");
     }
 
     //Salary Tax
     else if(i==38){
-      tiles[i].set(-1,0,0,6,750,6,"Salary Tax");
+      tiles[i].set(-1,0,0,6,750,0,"Salary Tax");
     }
 
     //type_7, color_7: railroad
     //Airport Station, Hong Kong Electric, Tsing Yi Station, Kowloon Station
     else if(i==5||i==12||i==15||i==25){
       if(i==5){
-        tiles[i].set(-1,0,0,7,2000,7,"Airport Station");
+        tiles[i].set(-1,0,0,7,2000,0,"Airport Station");
       }
-      else if(i==12){
-        tiles[i].set(-1,0,0,7,1500,7,"Hong Kong Electric");
-      }
+      
       else if(i==15){
-        tiles[i].set(-1,0,0,7,2000,7,"Tsing Yi Station");
+        tiles[i].set(-1,0,0,7,2000,0,"Tsing Yi Station");
       }
       else{
-        tiles[i].set(-1,0,0,7,2000,7,"Kowloon Station");
+        tiles[i].set(-1,0,0,7,2000,0,"Kowloon Station");
       }
     }
       
@@ -164,12 +162,17 @@ void initialise_tiles(Tile tiles[]){
         
     //Provincial
     else if(i==20){
-      tiles[i].set(-1,0,0,15,0,15,"Provincial");
+      tiles[i].set(-1,0,0,15,0,0,"Provincial");
     } 
       
     //Water Works
     else if(i==28){
-      tiles[i].set(-1,0,0,16,1500,16,"Water Works");
+      tiles[i].set(-1,0,0,16,1500,0,"Water Works");
     } 
+
+    //Hong Kong Electric
+    else if(i==12){
+        tiles[i].set(-1,0,0,7,1500,0,"Hong Kong Electric");
+      }
   }
 }
