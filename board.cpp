@@ -83,12 +83,6 @@ void PrintBoard(const vector<Player>& players, Tile tiles[]) {
         tiles[i].players.clear();
     }
 
-    // Update the board layout with player positions
-    for (const auto& player : players) {
-        tiles[player.position].players.push_back(player.name);
-    }
-    */
-
     // Update the board layout with property details
     for (const auto& player : players) {
         if (tiles[player.position].type == 4 && tiles[player.position].owner != -1) {
@@ -98,6 +92,12 @@ void PrintBoard(const vector<Player>& players, Tile tiles[]) {
             boardLayout[player.position / 11 + 5].replace((player.position % 11) * 12 + 1, propertyDetails.size(), propertyDetails);
         }
     }
+
+    // Update the board layout with player positions
+    for (const auto& player : players) {
+        tiles[player.position].players.push_back(player.name);
+    }
+    */
 
     // Print the board
     for (const auto& line : boardLayout) {
