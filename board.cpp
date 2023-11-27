@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include "board.h"
+#include "main.h"
 
 using namespace std;
 
@@ -102,5 +103,10 @@ void PrintBoard(const vector<Player>& players, Tile tiles[]) {
     // Print the board
     for (const auto& line : boardLayout) {
         cout << line << endl;
+    }
+
+    // Print the amount of money for each player
+    for (const auto& player : players) {
+        cout << "Player: " << player.name << " | Money: " << player.money << endl;
     }
 }
