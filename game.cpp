@@ -34,7 +34,14 @@ bool Player::change(int amount){
 	money += amount;
 	if (money < 0){
 		cout << name << " has run out of funds.";
-		// TODO: add mortgage handling
+        // Mortgage the player's properties one by one until they have enough money
+        for (Tile& tile : tiles) {
+            if (tile.owner == position && !tile.isMortgaged) {
+                mortgageProperty(tile);
+                if (money >= 0) {
+                    break;
+                }
+            }
 	}
 	return true;
 }
