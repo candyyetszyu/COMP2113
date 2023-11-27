@@ -78,7 +78,6 @@ void PrintBoard(const vector<Player>& players, Tile tiles[]) {
         "|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|"
     };
 
-    /*
     // Clear player positions
     for (int i = 0; i < 40; ++i) {
         tiles[i].players.clear();
@@ -98,7 +97,6 @@ void PrintBoard(const vector<Player>& players, Tile tiles[]) {
     for (const auto& player : players) {
         tiles[player.position].players.push_back(player.name);
     }
-    */
 
     // Print the board
     for (const auto& line : boardLayout) {
