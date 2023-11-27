@@ -318,8 +318,19 @@ int Game::run(){
 
                     break;
                 case 1: // community chest
-                    cout << players[i].name << " got a community chest card!" << endl;
-                    // TODO: Implement community chest card functionality
+                    cout << players[i].name << " drew a Community Chest card." << endl;
+                    // Check if there are any cards left in the stack
+                    if (!communityChestCards.empty()) {
+                        // Draw the last card from the stack
+                        string card = communityChestCards.back();
+                        communityChestCards.pop_back(); // Remove the last card
+                        
+                        // Apply the effect of the Community Chest card
+                        apply_community_chest_card_effect(players[i], card);
+                    } else {
+                        cout << "No more Community Chest cards left." << endl;
+                    }
+                    
                     break;
                 case 2: // go to jail
                     cout << players[i].name << " went to jail!" << endl;
