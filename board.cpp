@@ -89,7 +89,15 @@ void PrintBoard(const vector<Player>& players, Tile tiles[]) {
             int ownerIndex = tiles[player.position].owner;
             const Player& owner = players[ownerIndex];
             string propertyDetails = "Owner: " + owner.name + ", Houses: " + to_string(tiles[player.position].houses) + ", Hotels: " + to_string(tiles[player.position].hotels);
-            boardLayout[player.position / 11 + 5].replace((player.position % 11) * 12 + 1, propertyDetails.size(), propertyDetails);
+            string& tile = boardLayout[player.position / 11 + 5];
+        
+            int insertPosition = (player.position % 11) * 12 + 1;
+        
+            if (tile.size() < insertPosition + propertyDetails.size()) {
+                tile.resize(insertPosition + propertyDetails.size(), ' ');
+            }
+        
+            tile.replace(insertPosition, propertyDetails.size(), propertyDetails);
         }
     }
 
