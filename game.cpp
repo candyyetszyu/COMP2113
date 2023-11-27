@@ -5,6 +5,8 @@
 #include<algorithm>
 #include<fstream>
 #include<sstream>
+#include <algorithm>
+#include <random>
 
 #include "rules.h"
 #include "board.h"
@@ -63,6 +65,62 @@ void apply_chance_card_effect(Player& player, const ChanceCard& card, Tile tiles
             if(player.change(-500)){
 
             }
+            break;
+    }
+}
+
+// Define the Community Chest card stack
+vector<string> communityChestCards = {
+    "Advance to Go",
+    "Found money on the floor - Collect $100",
+    "Go directly to Jail",
+    "Pay hospital fees of $100",
+    "Consumption Voucher - Collect $100",
+    "It's Chinese New Year - Collect $20 from each player"
+};
+
+// Shuffle the Community Chest card stack
+random_device rd;
+mt19937 g(rd());
+shuffle(communityChestCards.begin(), communityChestCards.end(), g);
+
+void apply_community_chest_card_effect(Player& player, int cardIndex) {
+    switch (cardIndex) {
+        case 0:
+            // Card effect 1: Advance to Go
+            cout << player.name << " advanced to Go." << endl;
+            player.position = 0; // Move player to Go space
+            break;
+        case 1:
+            // Card effect 2: Found money on the floor - Collect $100
+            player.money += 100;
+            cout << player.name << " found money on the floor and received $100." << endl;
+            break;
+        case 2:
+            // Card effect 3: Go directly to Jail
+            cout << player.name << " went directly to Jail." << endl;
+            player.position = 10; // Move player to Jail space
+            player.inJail = true; // Set player inJail flag to true
+            break;
+        case 3:
+            // Card effect 4: Pay hospital fees of $100
+            player.money -= 100;
+            cout << player.name << " paid $100 as hospital fees." << endl;
+            break;
+        case 4:
+            // Card effect 5: Consumption Voucher - Collect $100
+            player.money += 100;
+            cout << player.name << " received $100 as a consumption voucher." << endl;
+            break;
+        case 5:
+            // Card effect 6: It's Chinese New Year - Collect $20 from each player
+            for (int j = 0; j < numPlayers; j++) {
+                if (j != i) {
+                    players[j].money -= 20;
+                    player.money += 20;
+                }
+            }
+            cout << player.name << " collected $20 from each player as Chinese New Year red pocket money." << endl;
             break;
     }
 }
@@ -195,7 +253,7 @@ int Game::run(){
     string cmd = "";
 
     // shuffle the chance card stack before starting the game
-    random_shuffle(chance_card.begin(), chance_card.end());
+    std::shuffle(chanceCards.begin(), chanceCards.end(), std::default_random_engine(std::random_device()()));
 
     PrintBoard(players, tiles);
 
