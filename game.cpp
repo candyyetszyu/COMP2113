@@ -169,6 +169,7 @@ Game::Game(int number_of_players){
 	        cin >> cmd;
 	        player.name = cmd;
         }
+	player.money = 1500
         player.is_bot = i;  // results in is_bot = false only for the first player
         players.push_back(player);
     }
@@ -303,7 +304,7 @@ int Game::run(){
 
             // move player position
             players[i].position = (players[i].position + dice1 + dice2) % tile_size;
-            cout << players[i].name << " moved to tile " << players[i].position << "." << endl;
+            cout << players[i].name << " moved to " << tiles[players[i].position].name << "." << endl;
 
             // handle actions with tiles
             switch (tiles[players[i].position].type) {
