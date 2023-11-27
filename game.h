@@ -11,6 +11,7 @@ struct Tile {
     int type; // type of tile
     int price; //price
     int group; //color
+    bool isMortgaged = false; // check whether a property is mortgaged, false by default
     std::string name = "";
     void set(int a, int b, int c, int d, int e, int f, std::string g){
     	owner = a; houses = b; hotels = c; type = d; price = e; group = f; name = g;

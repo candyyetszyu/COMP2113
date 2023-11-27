@@ -14,6 +14,20 @@
 
 using namespace std;
 
+void Player::mortgageProperty(Tile& tile) {
+    if (tile.owner != position) {
+        std::cout << "You can't mortgage a property you don't own.\n";
+        return;
+    }
+    if (tile.isMortgaged) {
+        std::cout << "This property is already mortgaged.\n";
+        return;
+    }
+    tile.isMortgaged = true;
+    money += tile.price / 2; // The mortgage amount is half the property price
+    std::cout << name << " mortgaged " << tile.name << " for $" << tile.price / 2 << ".\n";
+}
+
 bool Player::change(int amount){
 	// int amount: positive when player receives money, negative when player loses money
 	// returns true when succeed, false when fail
