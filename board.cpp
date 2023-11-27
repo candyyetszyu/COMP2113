@@ -8,51 +8,73 @@ using namespace std;
 
 void PrintBoard(const vector<Player>& players, Tile tiles[]) {
     string boardLayout[45] = {
-        "|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|",
-        "|    Free    |   Lei Yue  |            |    Wong    |   Kowloon  |  Kowloon   |    Kwun    |            |   Water    |  Tsim Sha  |            |",
-        "|  Parking   |     Mun    | Provincial |  Tai Sin   |    Tong    |  station   |    Tong    |  Mong Kok  |   Works    |    Tsui    | Go to Jail |",
-        "|            |            |            |            |            |            |            |            |            |            |            |",
-        "|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|",
-        "|   Tseung   |                                                                                                                    |  Causeway  |",
-        "|   Kwan O   |                                                                                                                    |     Bay    |",
-        "|            |                                                                                                                    |            |",
-        "|------------|                                                                                                                    |------------|",
-        "|            |                                                                                                                    |            |",
-        "|  Sha Tin   |                                                                                                                    | Cyberport  |",
-        "|            |                                                                                                                    |            |",
-        "|------------|                                                                                                                    |------------|",
-        "|            |                                                                                                                    |            |",
-        "|  Community |                                                                                                                    | Community  |",
-        "|   Chest    |                                                                                                                    |   Chest    |",
-        "|------------|                                                                                                                    |------------|",
-        "|            |                                                                                                                    |            |",
-        "|    Kwai    |                                                                                                                    |   Central  |",
-        "|   Chung    |                                                                                                                    |            |",
-        "|------------|                                                                                                                    |------------|",
-        "|            |                                                                                                                    |            |",
-        "|  Tsing Yi  |                                                                                                                    |  Hong Kong |",
-        "|  station   |                                                                                                                    |   station  |",
-        "|------------|                                                                                                                    |------------|",
-        "|            |                                                                                                                    |            |",
-        "|   Sham     |                                                                                                                    |   Chance   |",
-        "|   Tseng    |                                                                                                                    |            |",
-        "|------------|                                                                                                                    |------------|",
-        "|            |                                                                                                                    |            |",
-        "|  Tin Shui  |                                                                                                                    |   Repulse  |",
-        "|    Wai     |                                                                                                                    |     Bay    |",
-        "|------------|                                                                                                                    |------------|",
-        "|            |                                                                                                                    |            |",
-        "|  Hongkong  |                                                                                                                    | Salary Tax |",
-        "|  Electric  |                                                                                                                    |            |",
-        "|------------|                                                                                                                    |------------|",
-        "|            |                                                                                                                    |            |",
-        "|   Lo Wu    |                                                                                                                    |  The Peak  |",
-        "|            |                                                                                                                    |            |",
-        "|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|",
-        "|            |            |            |            |            |            |            |            |            |            |            |",
-        "|    Jail    |    Lamma   |   Cheung   |   Chance   |    Ngong   |  Airport   |   Income   |   Lantau   |  Community |  Chek Lap  |     Go     |",
-        "|            |   Island   |    Chau    |            |    Ping    |  station   |    Tax     |   Island   |    Chest   |     Kok    |            |",
-        "|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|------------|"
+        "|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|",
+        "|  Free Parking   |   Lei Yue Mun   |    Provincial   |  Wong Tai Sin   |  Kowloon Tong   | Kowloon station |    Kwun Tong    |    Mong Kok     |   Water Works   |  Tsim Sha Tsui  |   Go to Jail    |",
+        "|                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |",
+        "|                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |",
+        "|                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |",
+        "|                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |",
+        "|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|",
+        "|  Tseung Kwan O  |                                                                                                                                                                 |  Causeway Bay   |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|-----------------|                                                                                                                                                                 |-----------------|",
+        "|    Sha Tin      |                                                                                                                                                                 |    Cyberport    |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|-----------------|                                                                                                                                                                 |-----------------|",
+        "| Community Chest |                                                                                                                                                                 | Community Chest |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|-----------------|                                                                                                                                                                 |-----------------|",
+        "|   Kwai Chung    |                                                                                                                                                                 |     Central     |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|-----------------|                                                                                                                                                                 |-----------------|",
+        "| Tsing Yi station|                                                                                                                                                                 |Hong Kong station|",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|-----------------|                                                                                                                                                                 |-----------------|",
+        "|   Sham Tseng    |                                                                                                                                                                 |     Chance      |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|-----------------|                                                                                                                                                                 |-----------------|",
+        "|  Tin Shui Wai   |                                                                                                                                                                 |   Repulse Bay   |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|-----------------|                                                                                                                                                                 |-----------------|",
+        "|Hongkong Electric|                                                                                                                                                                 |    Salary Tax   |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|-----------------|                                                                                                                                                                 |-----------------|",
+        "|     Lo Wu       |                                                                                                                                                                 |    The Peak     |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|                 |                                                                                                                                                                 |                 |",
+        "|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|",
+        "|      Jail       |  Lamma Island   |   Cheung Chau   |     Chance      |    Ngong Ping   | Airport station |   Income Tax    |  Lantau Island  | Community Chest |  Chek Lap Kok   |       Go        |",
+        "|                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |",
+        "|                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |",
+        "|                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |",
+        "|                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |",
+        "|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|"
     };
 
     /*
@@ -67,25 +89,18 @@ void PrintBoard(const vector<Player>& players, Tile tiles[]) {
     }
     */
 
+    // Update the board layout with property details
+    for (const auto& player : players) {
+        if (tiles[player.position].type == 4 && tiles[player.position].owner != -1) {
+            int ownerIndex = tiles[player.position].owner;
+            const Player& owner = players[ownerIndex];
+            string propertyDetails = "Owner: " + owner.name + ", Houses: " + to_string(tiles[player.position].houses) + ", Hotels: " + to_string(tiles[player.position].hotels);
+            boardLayout[player.position / 11 + 5].replace((player.position % 11) * 12 + 1, propertyDetails.size(), propertyDetails);
+        }
+    }
+
     // Print the board
     for (const auto& line : boardLayout) {
         cout << line << endl;
-    }
-
-    for (int i = 0; i < tile_size; i++) {
-        cout << tiles[i].name;
-
-        // Check if the tile is a property and a player owns it
-        if (tiles[i].type == 4 && tiles[i].owner != -1) {
-            int ownerIndex = tiles[i].owner;
-            const Player& owner = players[ownerIndex];
-
-            // Print the number of houses and hotels
-            cout << " (Owner: " << owner.name;
-            cout << ", Houses: " << tiles[i].houses;
-            cout << ", Hotels: " << tiles[i].hotels;
-            cout << ")";
-        }
-        cout << endl;
     }
 }
