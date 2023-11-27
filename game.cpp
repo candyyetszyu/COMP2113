@@ -16,7 +16,7 @@ using namespace std;
 
 void Player::mortgageProperty(Tile& tile) {
     if (tile.owner != position) {
-        std::cout << "You can't mortgage a property you don't own.\n";
+        std::cout << "";
         return;
     }
     if (tile.isMortgaged) {
@@ -43,6 +43,12 @@ bool Player::change(int amount){
                 }
             }
 	}
+        if (money < 0) {
+            cout << name << " is still out of funds after mortgaging all properties. Game over for " << name << ".\n";
+            // TODO: Handle game over
+            return false;
+        }
+    }
 	return true;
 }
 
