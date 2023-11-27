@@ -28,6 +28,49 @@ void Player::mortgageProperty(Tile& tile) {
     std::cout << name << " mortgaged " << tile.name << " for $" << tile.price / 2 << ".\n";
 }
 
+void Player::Bankrupt(std::vector<Player>& players) {
+    std::cout << "The game is over for " << name << ".\n";
+
+    if (!is_bot) {
+        std::cout << "You've lost. Game over.\n";
+        // TODO: End the game
+        return;
+    }
+
+    // Transfer all of the player's properties to the bank and unmortgage them
+    for (Tile& tile : tiles) {
+        if (tile.owner == position) {
+            tile.owner = -1;
+            tile.isMortgaged = false;
+            std::cout << "The property " << tile.name << " has been returned to the bank.\n";
+        }
+    }
+
+    // Count remaining players
+    int playersRemaining = 0;
+    for (Player& player : players) {
+        if (player.money > 0) {
+            playersRemaining++;
+        }
+    }
+
+    // If there's only human player left, they win
+    if (playersRemaining == 1) {
+        for (Player& player : players) {
+            if (player.money > 0) {
+                std::cout << "Congratulations, " << player.name << "! You are the winner!\n";
+            }
+        }
+    } else {
+        // If there are more than one players left, the game continues
+        std::cout << "There are " << playersRemaining << " players remaining. The game continues.\n";
+    }
+
+    // Remove this player from the game
+    money = 0;
+    std::cout << name << " has been removed from the game.\n";
+}
+
 bool Player::change(int amount){
 	// int amount: positive when player receives money, negative when player loses money
 	// returns true when succeed, false when fail
@@ -45,7 +88,7 @@ bool Player::change(int amount){
 	}
         if (money < 0) {
             cout << name << " is still out of funds after mortgaging all properties. Game over for " << name << ".\n";
-            // TODO: Handle game over
+            Bankrupt(players);
             return false;
         }
     }
