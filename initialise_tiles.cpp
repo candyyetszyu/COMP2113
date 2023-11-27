@@ -31,36 +31,36 @@ void initialise_tiles(Tile tiles[]){
     //Chek Lap Kok, Lantau Island
     else if(i==1||i==3){
       if(i==1){
-        tiles[i].set(-1,0,0,4,600,4,"Chek Lap Kok");
+        tiles[i].set(-1,0,0,4,600,1,"Chek Lap Kok");
       }
       else{
-        tiles[i].set(-1,0,0,4,600,4,"Lantau Island");
+        tiles[i].set(-1,0,0,4,600,1,"Lantau Island");
       }
     }
 
     //Ngong Ping, Cheung Chau, Lamma Island
     else if(i==6||i==8||i==9){
       if(i==6){
-        tiles[i].set(-1,0,0,4,1000,4,"Ngong Ping");
+        tiles[i].set(-1,0,0,4,1000,2,"Ngong Ping");
       }
       else if(i==8){
-        tiles[i].set(-1,0,0,4,1000,4,"Cheung Chau");
+        tiles[i].set(-1,0,0,4,1000,2,"Cheung Chau");
       }
       else{
-        tiles[i].set(-1,0,0,4,1200,4,"Lamma Island");
+        tiles[i].set(-1,0,0,4,1200,2,"Lamma Island");
       }
     }
 
     //Lo Wu, Tin Shui Wai, Sham Tseng
     else if(i==11||i==13||i==14){
       if(i==11){
-        tiles[i].set(-1,0,0,4,1400,4,"Lo Wu");
+        tiles[i].set(-1,0,0,4,1400,3,"Lo Wu");
       }
       else if(i==13){
-        tiles[i].set(-1,0,0,4,1400,4,"Tin Shui Wai");
+        tiles[i].set(-1,0,0,4,1400,3,"Tin Shui Wai");
       }
       else{
-         tiles[i].set(-1,0,0,4,1600,4,"Sham Tseng");
+         tiles[i].set(-1,0,0,4,1600,3,"Sham Tseng");
       }
     }
     
@@ -80,49 +80,49 @@ void initialise_tiles(Tile tiles[]){
     //Lei Yue Mun, Wong Tai Sin, Kowloon Tong
     else if(i==21||i==23||i==24){
       if(i==21){
-        tiles[i].set(-1,0,0,4,2200,4,"Lei Yue Mun");
+        tiles[i].set(-1,0,0,4,2200,5,"Lei Yue Mun");
       }
       else if(i==23){
-        tiles[i].set(-1,0,0,4,2200,4,"Wong Tai Sin");
+        tiles[i].set(-1,0,0,4,2200,5,"Wong Tai Sin");
       }
       else{
-        tiles[i].set(-1,0,0,4,2400,4,"Kowloon Tong");
+        tiles[i].set(-1,0,0,4,2400,5,"Kowloon Tong");
       }
     }
 
     //Kwun Tong, Mong Kok, Tsim Sha Tsui
     else if(i==26||i==27||i==29){
       if(i==26){
-        tiles[i].set(-1,0,0,4,2600,4,"Kwun Tong");
+        tiles[i].set(-1,0,0,4,2600,6,"Kwun Tong");
       }
       else if(i==27){
-        tiles[i].set(-1,0,0,4,2600,4,"Mong Kok");
+        tiles[i].set(-1,0,0,4,2600,6,"Mong Kok");
       }
       else{
-        tiles[i].set(-1,0,0,4,2800,4,"Tsim Sha Tsui");
+        tiles[i].set(-1,0,0,4,2800,6,"Tsim Sha Tsui");
       }
     }
 
     //Causeway Bay, Cyberport, Central
     else if(i==31||i==32||i==34){
       if(i==31){
-        tiles[i].set(-1,0,0,4,3000,4,"Causeway Bay");
+        tiles[i].set(-1,0,0,4,3000,7,"Causeway Bay");
       }
       else if(i==32){
-        tiles[i].set(-1,0,0,4,3000,4,"Cyberport");
+        tiles[i].set(-1,0,0,4,3000,7,"Cyberport");
       }
       else{
-        tiles[i].set(-1,0,0,4,3200,4,"Central");
+        tiles[i].set(-1,0,0,4,3200,7,"Central");
       }
     }
 
     //Repulse Bay,The Peak
     else if(i==37||i==39){
       if(i==37){
-        tiles[i].set(-1,0,0,4,3500,4,"Repulse Bay");
+        tiles[i].set(-1,0,0,4,3500,8,"Repulse Bay");
       }
       else{
-        tiles[i].set(-1,0,0,4,4000,4,"The Peak");
+        tiles[i].set(-1,0,0,4,4000,8,"The Peak");
       }
     }
 
@@ -144,17 +144,17 @@ void initialise_tiles(Tile tiles[]){
     }
 
     //type_7, color_7: railroad
-    //Airport Station, Hong Kong Electric, Tsing Yi Station, Kowloon Station
-    else if(i==5||i==12||i==15||i==25){
+    else if(i==5||i==15||i==25||i==35){
       if(i==5){
         tiles[i].set(-1,0,0,7,2000,0,"Airport Station");
       }
-      
       else if(i==15){
         tiles[i].set(-1,0,0,7,2000,0,"Tsing Yi Station");
       }
-      else{
+      else if (i==25){
         tiles[i].set(-1,0,0,7,2000,0,"Kowloon Station");
+      } else{
+        tiles[i].set(-1,0,0,7,2000,0,"Hong Kong Station");
       }
     }
       
