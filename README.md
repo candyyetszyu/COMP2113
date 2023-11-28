@@ -14,7 +14,7 @@ Get ready and hop into the game to eliminate the opponents, good luck!
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
-# Monopoly Rules
+# Monopoly - Hong Kong Version Rules
 
 1. The game is played on a square board divided into 40 tiles.
 
@@ -38,7 +38,7 @@ Get ready and hop into the game to eliminate the opponents, good luck!
 
 11. The last remaining player is declared the winner of the game.
 
-You can always check the game rules with command "rule" again during the trial!
+You can always check the game rules with command "rules" again during the trial!
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
