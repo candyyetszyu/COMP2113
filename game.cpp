@@ -306,32 +306,40 @@ void Player::buyHouse(Tile& tile) {
 		return;
 	}
 	if (tile.owner == position) {
-		int color_sum=0, houses_num=0;
+		int color_sum=0, houses_num=0, houses_num_of_same_color=0;
 		for (int i=0; i<39; i++){
 			if (tile[i].owner == tile.owner && tile[i].group==tile[position].color){
-				color_sum+=1;
+				color_sum+=1; //detect whether players hv all property of the group
 			}
-			if (tile[i].owner == tile.owner && tile.houses>=0){
-				houses_num+=tile.houses;
+			if (tile[i].owner == tile.owner && tile[i].houses>=0){
+				houses_num+=tile[i].houses; //check total no. of houses players own
+				//implement: cannot erect more than one house on any one property of any color-group until you have built one house on every property of that group
+				if (tile[i].group==tile[position].color){
+					houses_num_of_same_color+=1;
+				}
 			}
 		}
 		if (tile[position].color == 1 ||tile[position].color == 8){
+			if (houses_num_of_same_color!=2 && tile[position].houses>=0){
+				std::cout << "You cannot buy houses here until you have built one house on every property of the group.\n";
+				return;
+			}
 			if (color_sum==2){
-				if (houses_num==0 && money>=500){
+				if (houses_num==0 && money>=50){
 					tile.houses+=1;
-					money -= 500;
+					money -= 50;
 				}
-				else if (houses_num==1 && money>=1000){
+				else if (houses_num==1 && money>=100){
 					tile.houses+=1;
-					money -= 1000;
+					money -= 100;
 				}
-				else if (houses_num==2 && money>=1500){
+				else if (houses_num==2 && money>=150){
 					tile.houses+=1;
-					money -= 1500;
+					money -= 150;
 				}
-				else if (houses_num==3 && money>=2000){
+				else if (houses_num==3 && money>=200){
 					tile.houses+=1;
-					money -= 2000;
+					money -= 200;
 				}
 				else if (houses_num>=4){
 					std::cout << "You can't build more than 4 houses.\n";
@@ -339,22 +347,26 @@ void Player::buyHouse(Tile& tile) {
 			}
 		}
 		else if (tile[position].color == 2 ||tile[position].color == 3||tile[position].color == 4 ||tile[position].color == 5||tile[position].color == 6 ||tile[position].color == 7){
+			if (houses_num_of_same_color!=3 && tile[position].houses>=0){
+				std::cout << "You cannot buy houses here until you have built one house on every property of the group.\n";
+				return;
+			}
 			if (color_sum==3){
-				if (houses_num==0 && money>=500){
+				if (houses_num==0 && money>=50){
 					tile.houses+=1;
-					money -= 500;
+					money -= 50;
 				}
-				else if (houses_num==1 && money>=1000){
+				else if (houses_num==1 && money>=100){
 					tile.houses+=1;
-					money -= 1000;
+					money -= 100;
 				}
-				else if (houses_num==2 && money>=1500){
+				else if (houses_num==2 && money>=150){
 					tile.houses+=1;
-					money -= 1500;
+					money -= 150;
 				}
-				else if (houses_num==3 && money>=2000){
+				else if (houses_num==3 && money>=200){
 					tile.houses+=1;
-					money -= 2000;
+					money -= 200;
 				}
 				else if (houses_num>=4){
 					std::cout << "You can't build more than 4 houses.\n";
