@@ -38,7 +38,7 @@ Get ready and hop into the game to eliminate the opponents, good luck!
 
 11. The last remaining player is declared the winner of the game.
 
-You can always check the game rules with command "rules" again during the trial!
+You can always check the game rules with the command "rules" again during the trial!
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
@@ -64,6 +64,7 @@ We use random number generation (RNG) for our game such as the outcome of rollin
 
 Element 2. Data structures for storing game status
 
+We implement data structures into arrays in our game, especially when we have to create an array of tiles for the game board so that we can save the details of the properties of each tile.
 
 Element 3. Dynamic memory management
 
@@ -71,10 +72,11 @@ We use <vector> in our programs so that the game status of players and the board
 
 Element 4. File input/output
 
-Player can save the game data during the game. The game resumes when the player loads the game.
+Players can save the game data during the game. The game resumes when the player loads the game.
 
 Element 5. Program codes in multiple files
 
+We created different header files and source files to separate the code so that we could organise and compile the game in a better way. On the other hand, we also use Makefile in our game which can connect the dependencies of the header files and source files and run the program after the player types "make main" and "./main" to start Monopoly - Hong Kong Version.
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
