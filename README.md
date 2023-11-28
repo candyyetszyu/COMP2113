@@ -30,13 +30,13 @@ Yeung Yui Sze
 
 Feature list
 
-1. We have used the generation of random for our game such as the outcome of rolling dice, the effect from chance card/community chest, and so on.
+1. We use random number generation (RNG) for our game such as the outcome of rolling dice, the effect from chance card/community chest, and so on.
 
 2. 
 
 3.
 
-4. Player can save and quit the game during the trial, and the game will be ressumed once the player rejoin the game.
+4. Player can save the game data and quit the game during the trial. Also, the game will be ressumed once the player rejoin the game.
 
 5.
 
