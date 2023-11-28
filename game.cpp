@@ -99,6 +99,38 @@ bool Player::change(int amount){
 	return true;
 }
 
+void Player::payRent(Tile& tile, std::vector<Player>& players) {
+    // Check if the tile is a property
+    if (tile.type != 4 && tile.type != 7 && tile.type != 8) {
+        std::cout << "This tile is not a property.\n";
+        return;
+    }
+
+    // Check if the property is owned by another player
+    if (tile.owner == -1 || tile.owner == position) {
+        std::cout << "This property is not owned by another player.\n";
+        return;
+    }
+
+    // Calculate the base rent amount
+    int rentAmount = tile.price / 10; // Base rent is 10% of the property price
+
+    // Increase the rent amount based on the number of houses and hotels
+    rentAmount += tile.houses * 50; // Each house increases the rent by $50
+    rentAmount += tile.hotels * 100; // Each hotel increases the rent by $100
+
+    // Deduct the rent amount from the player's money
+    if (!change(-rentAmount)) {
+        std::cout << name << " doesn't have enough money to pay the rent.\n";
+        return;
+    }
+
+    // Add the rent amount to the owner's money
+    players[tile.owner].change(rentAmount);
+
+    std::cout << name << " paid " << rentAmount << " to " << players[tile.owner].name << ".\n";
+}
+
 ChanceCard DrawChanceCard(vector<ChanceCard>& chance_card) {
     int randomIndex = rand() % chance_card.size();
     return chance_card[randomIndex];
@@ -440,7 +472,7 @@ int Game::run(){
                     }
                         // If the property is owned by another player, the current player must pay rent
                     else if (tiles[players[i].position].owner != i && tiles[players[i].position].owner != -1) {
-                        // TODO: Implement rent payment
+                        players[i].payRent(tiles[players[i].position], players);
                     }
                     break;
                 case 5: // go
