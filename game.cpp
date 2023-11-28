@@ -291,12 +291,77 @@ void Player::sellProperty(Tile& tile) {
         std::cout << "This tile is not sellable.\n";
         return;
     }
+
     if (tile.owner == position) {
         tile.owner = -1;
         money += tile.price / 2;
     } else {
         std::cout << "You don't own this property.\n";
     }
+}
+
+void Player::buyHouse(Tile& tile) {
+	if (tile.type != 4||tile.owner != position) {
+		std::cout << "You cannot buy houses here.\n";
+		return;
+	}
+	if (tile.owner == position) {
+		int color_sum=0, houses_num=0;
+		for (int i=0; i<39; i++){
+			if (tile[i].owner == tile.owner && tile[i].group==tile[position].color){
+				color_sum+=1;
+			}
+			if (tile[i].owner == tile.owner && tile.houses>=0){
+				houses_num+=tile.houses;
+			}
+		}
+		if (tile[position].color == 1 ||tile[position].color == 8){
+			if (color_sum==2){
+				if (houses_num==0 && money>=500){
+					tile.houses+=1;
+					money -= 500;
+				}
+				else if (houses_num==1 && money>=1000){
+					tile.houses+=1;
+					money -= 1000;
+				}
+				else if (houses_num==2 && money>=1500){
+					tile.houses+=1;
+					money -= 1500;
+				}
+				else if (houses_num==3 && money>=2000){
+					tile.houses+=1;
+					money -= 2000;
+				}
+				else if (houses_num>=4){
+					std::cout << "You can't build more than 4 houses.\n";
+				}
+			}
+		}
+		else if (tile[position].color == 2 ||tile[position].color == 3||tile[position].color == 4 ||tile[position].color == 5||tile[position].color == 6 ||tile[position].color == 7){
+			if (color_sum==3){
+				if (houses_num==0 && money>=500){
+					tile.houses+=1;
+					money -= 500;
+				}
+				else if (houses_num==1 && money>=1000){
+					tile.houses+=1;
+					money -= 1000;
+				}
+				else if (houses_num==2 && money>=1500){
+					tile.houses+=1;
+					money -= 1500;
+				}
+				else if (houses_num==3 && money>=2000){
+					tile.houses+=1;
+					money -= 2000;
+				}
+				else if (houses_num>=4){
+					std::cout << "You can't build more than 4 houses.\n";
+				}
+			}
+		}
+	}	
 }
 
 Game::Game(int number_of_players){
