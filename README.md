@@ -11,3 +11,10 @@ On the other hand, we add several game systems to diversify the game, like free 
 Monopoly - Hong Kong Version is based on C++ programming, and we used dynamic memory management, data structures, randomness, and so on to run the program so that it is fair to all players!
 
 Get ready and hop into the game to eliminate the opponents, good luck!
+
+Team members for Monopoly - Hong Kong Version
+Chan Pui Wai Wesley
+Chuang Chun Ki
+Ku Chung Yiu (3036101434)
+Ye Tsz Yu
+Yeung Yui Sze
