@@ -30,6 +30,10 @@ Yeung Yui Sze
 
 Feature list
 
+1. We have used the generation of random for our game such as the outcome of rolling dice, the effect of chance card/community chest, and so on.
+
+2. 
+
 ----------------------------------------------------------------------------------------
 
 # How to start our game
