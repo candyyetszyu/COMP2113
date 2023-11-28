@@ -16,7 +16,7 @@ Get ready and hop into the game to eliminate the opponents, good luck!
 
 Team member list for Monopoly - Hong Kong Version
 
-Chan Pui Wai Wesley
+Chan Pui Wai Wesley (3035922702)
 
 Chuang Chun Ki
 
@@ -30,16 +30,16 @@ Yeung Yui Sze
 
 Feature list
 
-1. We use random number generation (RNG) for our game such as the outcome of rolling dice, the effect from chance card/community chest, and so on.
-
+1. We use random number generation (RNG) for our game such as the outcome of rolling dice, the effects from chance card/community chest, and so on.
 2. 
-
 3.
-
-4. Player can save the game data and quit the game during the trial. Also, the game will be ressumed once the player rejoin the game.
-
+4. Player can save the game data during the game. The game resumes when the player loads the game.
 5.
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
 # How to start our game
+
+Please run the following commands in this order:
+1. `make main`
+2. `./main`
