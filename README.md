@@ -14,7 +14,7 @@ Get ready and hop into the game to eliminate the opponents, good luck!
 
 ----------------------------------------------------------------------------------------
 
-Team members for Monopoly - Hong Kong Version
+Team member list for Monopoly - Hong Kong Version
 
 Chan Pui Wai Wesley
 
@@ -27,3 +27,9 @@ Ye Tsz Yu
 Yeung Yui Sze
 
 ----------------------------------------------------------------------------------------
+
+Feature list
+
+----------------------------------------------------------------------------------------
+
+# How to start our game
