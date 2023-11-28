@@ -28,12 +28,16 @@ void Player::mortgageProperty(Tile& tile) {
     std::cout << name << " mortgaged " << tile.name << " for $" << tile.price / 2 << ".\n";
 }
 
+void Game::endGame() {
+    exit(0); // Exit the program
+}
+
 void Player::Bankrupt(std::vector<Player>& players) {
     std::cout << "The game is over for " << name << ".\n";
 
     if (!is_bot) {
         std::cout << "You've lost. Game over.\n";
-        // TODO: End the game
+        game.endGame(); // End the game
         return;
     }
 
