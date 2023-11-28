@@ -14,6 +14,34 @@ Get ready and hop into the game to eliminate the opponents, good luck!
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
+# Monopoly Rules
+
+1. The game is played on a square board divided into 40 tiles.
+
+2. Each player starts with a set amount of money and a token on the 'GO' space.
+
+3. Players take turns in clockwise order.
+
+4. Roll two six-sided dice and move your token clockwise around the board. If you roll doubles, you roll again and take another turn.
+
+5. Depending on the space you land on, you can buy properties, pay rent, draw cards, etc.
+
+6. If you land on an unowned property, you can choose to buy it or not.
+
+7. If you own the property, you can build houses and hotels on them when you land on it again.
+
+8. If you land on a property owned by another player, you must pay them rent.
+
+9. If you land on certain spaces, you may draw a Chance card.
+
+10. The game continues until all but one player goes bankrupt.
+
+11. The last remaining player is declared the winner of the game.
+
+You can always check the game rules with command "rule" again during the trial!
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
 Team member list for Monopoly - Hong Kong Version
 
 Chan Pui Wai Wesley (3035922702)
