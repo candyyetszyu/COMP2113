@@ -28,6 +28,44 @@ void Player::mortgageProperty(Tile& tile) {
     std::cout << name << " mortgaged " << tile.name << " for $" << tile.price / 2 << ".\n";
 }
 
+void Player::unmortgageProperty(Tile& tile) {
+    // Check if the tile is a property
+    if (tile.type != 4) {
+        std::cout << "This tile is not a property.\n";
+        return;
+    }
+
+    // Check if the property is owned by the current player
+    if (tile.owner != position) {
+        std::cout << "You do not own this property.\n";
+        return;
+    }
+
+    // Check if the property is currently mortgaged
+    if (!tile.isMortgaged) {
+        std::cout << "This property is not currently mortgaged.\n";
+        return;
+    }
+
+    // Calculate the mortgage amount (mortgage is 50% of the property price)
+    int mortgageAmount = tile.price / 2;
+
+    // Check if the player has enough money to pay the mortgage
+    if (money < mortgageAmount) {
+        std::cout << "You don't have enough money to unmortgage this property.\n";
+        return;
+    }
+
+    // Deduct the mortgage amount from the player's money
+    money -= mortgageAmount;
+
+    // Change the property's status to unmortgaged
+    tile.isMortgaged = false;
+
+    // Print a message indicating the property has been unmortgaged
+    std::cout << name << " unmortgaged " << tile.name << " for $" << mortgageAmount << ".\n";
+}
+
 void Game::endGame() {
     exit(0); // Exit the program
 }
@@ -381,6 +419,28 @@ int Game::run(){
                 cout << players[i].name << " chose not to pay the fine and will remain in jail." << endl;
             }
         } else {
+            // Ask the player if they want to unmortgage any properties
+            if (players[i].is_bot) {
+                // Bot: unmortgage a property if money is more than $1000
+                if (players[i].money > 1000) {
+                    for (int j = 0; j < tile_size; ++j) {
+                        if (tiles[j].owner == i && tiles[j].isMortgaged) {
+                            players[i].unmortgageProperty(tiles[j]);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                std::string unmortgage;
+                std::cout << players[i].name << ", do you want to unmortgage any properties? (yes/no)\n";
+                std::cin >> unmortgage;
+                if (unmortgage == "yes") {
+                    int propertyIndex;
+                    std::cout << "Enter the index of the property you want to unmortgage:\n";
+                    std::cin >> propertyIndex;
+                    players[i].unmortgageProperty(tiles[propertyIndex]);
+                }
+            }
             // Ask the player if they want to sell any properties
             if (players[i].is_bot) {
                 // Bot: sell a property if money is less than $500
