@@ -377,7 +377,12 @@ int Game::run(){
             cout << players[i].name << " rolled " << dice1 << " and " << dice2 << " on the dice." << endl;
 
             // move player position
-            players[i].position = (players[i].position + dice1 + dice2) % tile_size;
+            players[i].position = (players[i].position + dice1 + dice2);
+            if (players[i].position >= tile_size){
+            	players[i].pos -= tile_size;
+            	cout << players[i].name << " passed or landed on Go and collected $200." << endl;
+                players[i].change(200);
+            }
             cout << players[i].name << " moved to " << tiles[players[i].position].name << "." << endl;
 
             // handle actions with tiles
@@ -439,8 +444,6 @@ int Game::run(){
                     }
                     break;
                 case 5: // go
-                    cout << players[i].name << " passed or landed on Go and collected $200." << endl;
-                    players[i].change(200);
                     break;
                 case 6: // tax
                     cout << players[i].name << " paid $" << tiles[players[i].position].name << " tax!" << endl;

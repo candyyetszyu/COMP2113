@@ -18,7 +18,7 @@ void rule(){
 
     cout << "6. If you land on an unowned property, you can choose to buy it or not." << endl;
 
-    cout << "7. If you own the property, you can build houses and hotels on them when you land on it again" << endl;
+    cout << "7. If you own the property, you can build houses and hotels on them when you land on it again." << endl;
 
     cout << "8. If you land on a property owned by another player, you must pay them rent." << endl;
 
