@@ -13,8 +13,14 @@ Monopoly - Hong Kong Version is based on C++ programming, and we used dynamic me
 Get ready and hop into the game to eliminate the opponents, good luck!
 
 Team members for Monopoly - Hong Kong Version
+
 Chan Pui Wai Wesley
+
 Chuang Chun Ki
+
 Ku Chung Yiu (3036101434)
+
 Ye Tsz Yu
+
 Yeung Yui Sze
+
