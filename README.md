@@ -28,13 +28,25 @@ Yeung Yui Sze
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
-Feature list
+Feature List
 
-1. We use random number generation (RNG) for our game such as the outcome of rolling dice, the effects from chance card/community chest, and so on.
-2. 
-3.
-4. Player can save the game data during the game. The game resumes when the player loads the game.
-5.
+Element 1. Generation of random game sets or events
+
+We use random number generation (RNG) for our game such as the outcome of rolling dice, the effects from chance card/community chest, and so on.
+
+Element 2. Data structures for storing game status
+
+
+Element 3. Dynamic memory management
+
+We use <vector> in our programs so that the game status of players and the board will keep updating after they roll the dice.
+
+Element 4. File input/output
+
+Player can save the game data during the game. The game resumes when the player loads the game.
+
+Element 5. Program codes in multiple files
+
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
