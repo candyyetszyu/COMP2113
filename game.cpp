@@ -317,10 +317,10 @@ void Player::sellProperty(Tile& tile) {
         std::cout << "This tile is not sellable.\n";
         return;
     }
-
     if (tile.owner == index) {
         tile.owner = -1;
         money += tile.price / 2;
+        cout << name << " sold " << tile.name << endl;
     } else {
         std::cout << "You don't own this property.\n";
     }

@@ -103,6 +103,6 @@ void PrintBoard(const vector<Player>& players, Tile tiles[]) {
 
     // Print the amount of money for each player
     for (const auto& player : players) {
-        cout << "Player: " << player.name << " | Money: " << player.money << endl;
+        cout << "Player: " << player.name << " | Money: " << player.money << " | Location: " << tiles[player.position].name << endl;
     }
 }
