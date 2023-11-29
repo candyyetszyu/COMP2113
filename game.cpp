@@ -257,6 +257,7 @@ struct CommunityChestCard {
 CommunityChestCard DrawCommunityChestCard(vector<CommunityChestCard>& communityChestCards) {
     int randomIndex = rand() % communityChestCards.size();
     return communityChestCards[randomIndex];
+}
 
 // Apply the effect of the Community Chest card
 void apply_community_chest_card_effect(Player& player, const CommunityChestCard& card, Tile tiles[], int free_parking, vector<Player>& players) {
