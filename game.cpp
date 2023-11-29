@@ -431,7 +431,7 @@ void Player::buyHouse(Tile& tile) {
 				}
 			}
 		}
-	}	
+	}
 }
 
 void Player::buyHotel(Tile& tile) {
@@ -439,7 +439,7 @@ void Player::buyHotel(Tile& tile) {
 		std::cout << "You cannot buy hotels here.\n";
 		return;
 	}
-	if (tile.owner == position) { 
+	if (tile.owner == position) {
 		int color_sum=0, four_houses_of_each=0;
 		for (int i=0; i<39; i++){
 			if (tile[i].owner == tile.owner && tile[i].group==tile[position].group && tile[i].houses>=0){
@@ -485,6 +485,42 @@ void Player::buyHotel(Tile& tile) {
 			}
 		}
 	}
+}
+
+void Player::sellHouse(Tile& tile) {
+    if (tile.type != 4 || tile.owner != position) {
+        std::cout << "You cannot sell houses here.\n";
+        return;
+    }
+    if (tile.owner == position && tile.houses > 0) {
+        int houseCost = 0;
+        switch (tile.houses) {
+            case 1: houseCost = 50; break;
+            case 2: houseCost = 100; break;
+            case 3: houseCost = 150; break;
+            case 4: houseCost = 200; break;
+        }
+        tile.houses -= 1;
+        money += houseCost / 2;  // Player gets half the cost back
+        std::cout << "House sold.\n";
+    } else {
+        std::cout << "No houses to sell on this property.\n";
+    }
+}
+
+void Player::sellHotel(Tile& tile) {
+    if (tile.type != 4 || tile.owner != position) {
+        std::cout << "You cannot sell hotels here.\n";
+        return;
+    }
+    if (tile.owner == position && tile.hotels > 0) {
+        int hotelCost = 50;
+        tile.hotels -= 1;
+        money += hotelCost / 2;  // Player gets half the cost back
+        std::cout << "Hotel sold.\n";
+    } else {
+        std::cout << "No hotels to sell on this property.\n";
+    }
 }
 
 Game::Game(int number_of_players){
@@ -633,28 +669,6 @@ int Game::run(){
                     players[i].unmortgageProperty(tiles[propertyIndex]);
                 }
             }
-            // Ask the player if they want to sell any properties
-            if (players[i].is_bot) {
-                // Bot: sell a property if money is less than $500
-                if (players[i].money < 500) {
-                    for (int j = 0; j < tile_size; ++j) {
-                        if (tiles[j].owner == i) {
-                            players[i].sellProperty(tiles[j]);
-                            break;
-                        }
-                    }
-                }
-            } else {
-                std::string sell;
-                std::cout << players[i].name << ", do you want to sell any properties? (yes/no)\n";
-                std::cin >> sell;
-                if (sell == "yes") {
-                    int propertyIndex;
-                    std::cout << "Enter the index of the property you want to sell:\n";
-                    std::cin >> propertyIndex;
-                    players[i].sellProperty(tiles[propertyIndex]);
-                }
-            }
             // roll dice
             int dice1 = rand() % 6 + 1;
             int dice2 = rand() % 6 + 1;
@@ -790,6 +804,61 @@ int Game::run(){
         }
 
         PrintBoard(players, tiles);
+
+        // Ask the player if they want to sell any properties or buy/sell houses/hotels
+        if (players[i].is_bot) {
+            if (players[i].money < 500) {
+                // Bot: sell a property or a house/hotel if it owns any
+                for (int j = 0; j < tile_size; ++j) {
+                    if (tiles[j].owner == i) {
+                        if (tiles[j].houses > 0) {
+                            players[i].sellHouse(tiles[j]);
+                            break;
+                        } else if (tiles[j].hotels > 0) {
+                            players[i].sellHotel(tiles[j]);
+                            break;
+                        } else {
+                            players[i].sellProperty(tiles[j]);
+                            break;
+                        }
+                    }
+                }
+            } else if (players[i].money > 1000) {
+                // Bot: buy a house/hotel on a property it owns
+                for (int j = 0; j < tile_size; ++j) {
+                    if (tiles[j].owner == i) {
+                        if (tiles[j].houses < 4) {
+                            players[i].buyHouse(tiles[j]);
+                            break;
+                        } else if (tiles[j].houses == 4 && tiles[j].hotels == 0) {
+                            players[i].buyHotel(tiles[j]);
+                            break;
+                        }
+                    }
+                }
+            }
+        } else {
+            std::string action;
+            std::cout << players[i].name << ", do you want to sell any properties, or buy/sell houses or hotels? (sell_property/buy_house/buy_hotel/sell_house/sell_hotel/exit)\n";
+            std::cin >> action;
+            if (action == "exit") {
+                return;
+            }
+            int propertyIndex;
+            std::cout << "Enter the index of the property:\n";
+            std::cin >> propertyIndex;
+            if (action == "sell_property") {
+                players[i].sellProperty(tiles[propertyIndex]);
+            } else if (action == "buy_house") {
+                players[i].buyHouse(tiles[propertyIndex]);
+            } else if (action == "buy_hotel") {
+                players[i].buyHotel(tiles[propertyIndex]);
+            } else if (action == "sell_house") {
+                players[i].sellHouse(tiles[propertyIndex]);
+            } else if (action == "sell_hotel") {
+                players[i].sellHotel(tiles[propertyIndex]);
+            }
+        }
 
         if (i + 1 == n) {
             // end round
