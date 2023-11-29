@@ -338,13 +338,13 @@ void Player::buyHouse(Tile& tile) {
 			if (tile[i].owner == tile.owner && tile[i].houses>=0){
 				houses_num+=tile[i].houses; //check total no. of houses players own
 				//implement: cannot erect more than one house on any one property of any color-group until you have built one house on every property of that group
-				if (tile[i].group==tile[position].color){
+				if (tile[i].group==tile[position].group){
 					houses_num_of_same_color+=1;
 				}
 			}
 		}
 		if (tile[position].group == 1 ||tile[position].group == 8){
-			if (houses_num_of_same_color!=2 && tile[position].houses>=0){
+			if (houses_num_of_same_color!=2){ //check whether players have 1 house on every property
 				std::cout << "You cannot buy houses here until you have built one house on every property of the group.\n";
 				return;
 			}
@@ -371,7 +371,7 @@ void Player::buyHouse(Tile& tile) {
 			}
 		}
 		else if (tile[position].group == 2 ||tile[position].group == 3||tile[position].group == 4 ||tile[position].group == 5||tile[position].group == 6 ||tile[position].group == 7){
-			if (houses_num_of_same_color!=3 && tile[position].houses>=0){
+			if (houses_num_of_same_color!=3 ){
 				std::cout << "You cannot buy houses here until you have built one house on every property of the group.\n";
 				return;
 			}
@@ -405,11 +405,11 @@ void Player::buyHotel(Tile& tile) {
 		std::cout << "You cannot buy hotels here.\n";
 		return;
 	}
-	if (tile.owner == position) {
+	if (tile.owner == position) { 
 		int color_sum=0, four_houses_of_each=0;
 		for (int i=0; i<39; i++){
-			if (tile[i].owner == tile.owner && tile[i].group==tile[position].group){
-				color_sum+=1; //detect whether players hv all property of the group
+			if (tile[i].owner == tile.owner && tile[i].group==tile[position].group && tile[i].houses>=0){
+				color_sum+=1; //implement: check whether players hv houses of the property of the group
 			}
 			if (tile[i].owner == tile.owner && tile[i].houses==4){
 				//check whether players have built four houses on each property
@@ -417,7 +417,7 @@ void Player::buyHotel(Tile& tile) {
 			}
 		}
 		if (tile[position].group == 1 ||tile[position].group == 8){
-			if (color_sum!=2 && four_houses_of_each!=4){
+			if (color_sum!=2 ||four_houses_of_each!=4){
 				std::cout << "You cannot buy hotel here until you have built four houses on every property of the group.\n";
 				return;
 			}
@@ -434,7 +434,7 @@ void Player::buyHotel(Tile& tile) {
 			}
 		}
 		else if (tile[position].group == 2 ||tile[position].group == 3||tile[position].group == 4 ||tile[position].group == 5||tile[position].group == 6 ||tile[position].group == 7){
-			if (color_sum!=3 && four_houses_of_each!=4){
+			if (color_sum!=3 || four_houses_of_each!=4){
 				std::cout << "You cannot buy hotel here until you have built four houses on every property of the group.\n";
 				return;
 			}
