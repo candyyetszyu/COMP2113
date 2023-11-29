@@ -56,7 +56,7 @@ Yeung Yui Sze (3035667390)
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
-Feature List
+# Feature List
 
 Element 1. Generation of random game sets or events
 
