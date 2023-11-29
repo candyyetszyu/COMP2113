@@ -3,7 +3,6 @@
 #include<vector>
 
 #include"game.h"
-#include "rules.h"
 
 using namespace std;
 

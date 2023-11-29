@@ -5,8 +5,8 @@
 #include<algorithm>
 #include<fstream>
 #include<sstream>
-#include <algorithm>
-#include <random>
+#include<random>
+#include<ctime>
 
 #include "rules.h"
 #include "board.h"
@@ -477,6 +477,7 @@ Game::Game(int number_of_players){
 
     initialise_tiles(tiles);
     n = number_of_players;
+    srand(time(0));
 }
 
 Game::Game(string filename){
@@ -516,6 +517,7 @@ Game::Game(string filename){
 		cout << "Error in loading game." << endl;
 		bad_load = true;
 	}
+    srand(time(0));
 }
 
 int Game::run(){

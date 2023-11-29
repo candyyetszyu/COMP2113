@@ -1,3 +1,5 @@
+#include <vector>
+#include <string>
 #ifndef GAME_H
 
 #define GAME_H
