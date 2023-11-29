@@ -666,11 +666,14 @@ int Game::run(){
                     cout << players[i].name << " got a chance card!" << endl;
 
                     // apply chance card effect if available
-                    if (!chance_card.empty()) {
-                        apply_chance_card_effect(players[i], chance_card.back(), tiles, free_parking, players);
-                        chance_card.pop_back(); // remove the last chance card
-                    }
-
+                    void draw_chance_card(Player& player, Tile tiles[], int free_parking, vector<Player>& players) {
+			if (!chanceCards.empty()) {
+			    ChanceCard card = DrawChanceCard(chanceCards);
+			    apply_chance_card_effect(player, card, tiles, free_parking, players);}
+			else {
+			    cout << "No more Chance cards left." << endl;
+			}
+		    }
                     break;
                 case 1: // community chest
 		    cout << players[i].name << " drew a Community Chest card." << endl;
