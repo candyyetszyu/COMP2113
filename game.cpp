@@ -212,55 +212,59 @@ void apply_chance_card_effect(Player& player, const ChanceCard& card, Tile tiles
             break;
     }
 }
-
-// Define the Community Chest card stack
-vector<string> communityChestCards = {
-    "Advance to Go",
-    "Found money on the floor - Collect $100",
-    "Go directly to Jail",
-    "Pay hospital fees of $100",
-    "Consumption Voucher - Collect $100",
-    "It's Chinese New Year - Collect $20 from each player"
+// Define the Community Chest card codes
+enum class CommunityChestCardType {
+    AdvanceToGo,
+    FoundMoney,
+    GoToJail,
+    PayHospitalFees,
+    ConsumptionVoucher,
+    ChineseNewYear
 };
 
-// Shuffle the Community Chest card stack
-random_device rd;
-mt19937 g(rd());
-shuffle(communityChestCards.begin(), communityChestCards.end(), g);
+struct CommunityChestCard {
+    CommunityChestCardType type;
+    string message;
+};
 
-void apply_community_chest_card_effect(Player& player, int cardIndex) {
-    switch (cardIndex) {
-        case 0:
-            // Card effect 1: Advance to Go
+// Function to draw a Community Chest card randomly
+CommunityChestCard DrawCommunityChestCard(vector<CommunityChestCard>& communityChestCards) {
+    int randomIndex = rand() % communityChestCards.size();
+    return communityChestCards[randomIndex];
+
+// Apply the effect of the Community Chest card
+void apply_community_chest_card_effect(Player& player, const CommunityChestCard& card, Tile tiles[], int free_parking, vector<Player>& players) {
+    switch (card.type) {
+        case CommunityChestCardType::AdvanceToGo:
             cout << player.name << " advanced to Go." << endl;
             player.position = 0; // Move player to Go space
             break;
-        case 1:
-            // Card effect 2: Found money on the floor - Collect $100
+
+        case CommunityChestCardType::FoundMoney:
             player.money += 100;
             cout << player.name << " found money on the floor and received $100." << endl;
             break;
-        case 2:
-            // Card effect 3: Go directly to Jail
+
+        case CommunityChestCardType::GoToJail:
             cout << player.name << " went directly to Jail." << endl;
             player.position = 10; // Move player to Jail space
             player.inJail = true; // Set player inJail flag to true
             break;
-        case 3:
-            // Card effect 4: Pay hospital fees of $100
+
+        case CommunityChestCardType::PayHospitalFees:
             player.money -= 100;
             cout << player.name << " paid $100 as hospital fees." << endl;
             break;
-        case 4:
-            // Card effect 5: Consumption Voucher - Collect $100
+
+        case CommunityChestCardType::ConsumptionVoucher:
             player.money += 100;
             cout << player.name << " received $100 as a consumption voucher." << endl;
             break;
-        case 5:
-            // Card effect 6: It's Chinese New Year - Collect $20 from each player
-            for (int j = 0; j < numPlayers; j++) {
-                if (j != i) {
-                    players[j].money -= 20;
+
+        case CommunityChestCardType::ChineseNewYear:
+            for (auto& p : players) {
+                if (p.name != player.name) {
+                    p.money -= 20;
                     player.money += 20;
                 }
             }
@@ -268,6 +272,26 @@ void apply_community_chest_card_effect(Player& player, int cardIndex) {
             break;
     }
 }
+
+// Define the Community Chest card stack
+vector<CommunityChestCard> communityChestCards = {
+    { CommunityChestCardType::AdvanceToGo, "Advance to Go" },
+    { CommunityChestCardType::FoundMoney, "Found money on the floor - Collect $100" },
+    { CommunityChestCardType::GoToJail, "Go directly to Jail" },
+    { CommunityChestCardType::PayHospitalFees, "Pay hospital fees of $100" },
+    { CommunityChestCardType::ConsumptionVoucher, "Consumption Voucher - Collect $100" },
+    { CommunityChestCardType::ChineseNewYear, "It's Chinese New Year - Collect $20 from each player" }
+
+// Draw a Community Chest card and apply its effect
+void draw_community_chest_card(Player& player, Tile tiles[], int free_parking, vector<Player>& players) {
+    if (!communityChestCards.empty()) {
+        CommunityChestCard card = DrawCommunityChestCard(communityChestCards);
+        apply_community_chest_card_effect(player, card, tiles, free_parking, players);
+    } else {
+        cout << "No more Community Chest cards left." << endl;
+    }
+}
+
 
 void Player::buyProperty(Tile& tile, int playerIndex) {
     if (tile.type != 4 && tile.type != 7 && tile.type != 8) {
@@ -474,8 +498,12 @@ int Game::run(){
     int i = 0;
     string cmd = "";
 
-    // shuffle the chance card stack before starting the game
+    // shuffle the chance card stack and community chest card stack before starting the game
     std::shuffle(chanceCards.begin(), chanceCards.end(), std::default_random_engine(std::random_device()()));
+
+    // shuffle the commmunity chest card stack and community chest card stack before starting the game
+    std::shuffle(communityChestCards.begin(), communityChestCards.end(), std::default_random_engine(std::random_device()()));
+
 
     PrintBoard(players, tiles);
 
@@ -567,20 +595,10 @@ int Game::run(){
 
                     break;
                 case 1: // community chest
-                    cout << players[i].name << " drew a Community Chest card." << endl;
-                    // Check if there are any cards left in the stack
-                    if (!communityChestCards.empty()) {
-                        // Draw the last card from the stack
-                        string card = communityChestCards.back();
-                        communityChestCards.pop_back(); // Remove the last card
-                        
-                        // Apply the effect of the Community Chest card
-                        apply_community_chest_card_effect(players[i], card);
-                    } else {
-                        cout << "No more Community Chest cards left." << endl;
-                    }
-                    
-                    break;
+		    cout << players[i].name << " drew a Community Chest card." << endl;
+		    draw_community_chest_card(players[i], tiles, free_parking, players);
+		    break;
+
                 case 2: // go to jail
                     cout << players[i].name << " went to jail!" << endl;
                     players[i].position = 10; // Go to Jail tile
