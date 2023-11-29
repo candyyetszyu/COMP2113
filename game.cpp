@@ -833,50 +833,51 @@ void Game::save(string filename){
 	}
 
 	// save data of chance cards
+	fout << chance_card.size() << endl;
 	for (const auto& card : chance_card) {
-        switch (card.type) {
-            case ChanceCardType::AdvanceToGo:
-                fout << "AdvanceToGo" << endl;
-                break;
-            case ChanceCardType::GoToJail:
-                fout << "GoToJail" << endl;
-                break;
-            case ChanceCardType::GoBackThreeSpaces:
-                fout << "GoBackThreeSpaces" << endl;
-                break;
-            case ChanceCardType::PayEveryone:
-                fout << "PayEveryone" << endl;
-                break;
-            case ChanceCardType::PayBank:
-                fout << "PayBank" << endl;
-                break;
-		}
-	}
+            switch (card.type) {
+                case ChanceCardType::AdvanceToGo:
+                    fout << "AdvanceToGo" << endl;
+                    break;
+                case ChanceCardType::GoToJail:
+                    fout << "GoToJail" << endl;
+                    break;
+                case ChanceCardType::GoBackThreeSpaces:
+                    fout << "GoBackThreeSpaces" << endl;
+                    break;
+                case ChanceCardType::PayEveryone:
+                    fout << "PayEveryone" << endl;
+                    break;
+                case ChanceCardType::PayBank:
+                    fout << "PayBank" << endl;
+                    break;
+		    }
+	    }
 
 	// Save data of community chest cards
     	fout << community_chest.size() << endl;
     	for (const auto& card : community_chest) {
-        switch (card.type) {
-            case CommunityChestCardType::AdvanceToGo:
-                fout << "AdvanceToGo" << endl;
-                break;
-            case CommunityChestCardType::FoundMoney:
-                fout << "FoundMoney" << endl;
-                break;
-            case CommunityChestCardType::GoToJail:
-                fout << "GoToJail" << endl;
-                break;
-            case CommunityChestCardType::PayHospitalFees:
-                fout << "PayHospitalFees" << endl;
-                break;
-            case CommunityChestCardType::ConsumptionVoucher:
-                fout << "ConsumptionVoucher" << endl;
-                break;
-            case CommunityChestCardType::ChineseNewYear:
-                fout << "ChineseNewYear" << endl;
-                break;
+            switch (card.type) {
+                case CommunityChestCardType::AdvanceToGo:
+                    fout << "AdvanceToGo" << endl;
+                    break;
+                case CommunityChestCardType::FoundMoney:
+                    fout << "FoundMoney" << endl;
+                    break;
+                case CommunityChestCardType::GoToJail:
+                    fout << "GoToJail" << endl;
+                    break;
+                case CommunityChestCardType::PayHospitalFees:
+                    fout << "PayHospitalFees" << endl;
+                    break;
+                case CommunityChestCardType::ConsumptionVoucher:
+                    fout << "ConsumptionVoucher" << endl;
+                    break;
+                case CommunityChestCardType::ChineseNewYear:
+                    fout << "ChineseNewYear" << endl;
+                    break;
+            }
         }
-    }
 	
 	fout.close();
 }
