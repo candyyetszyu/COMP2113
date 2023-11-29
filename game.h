@@ -21,14 +21,17 @@ struct Tile {
 struct Player {
     int money = 0; // amount of money the player has
     int position = 0; // position of the player on the board, integer between 0 and 39
+    int index; // index of player in vector
     std::string name = ""; // name of player
     bool in_jail = false; // whether player is in jail or not
     bool is_bot;
-    bool change(int amount);
-    void buyProperty(Tile& tile, int playerIndex);
+    void buyProperty(Tile& tile);
     void sellProperty(Tile& tile);
+    void mortgageProperty(Tile& tile);
+    void unmortgageProperty(Tile& tile);
 };
 
+// Define the Chance card codes
 enum class ChanceCardType {
     AdvanceToGo,
     GoToJail,
@@ -39,20 +42,42 @@ enum class ChanceCardType {
 
 struct ChanceCard {
     ChanceCardType type;
-    int amount; // amount is used for paying everyone $200 or paying the bank $500
+    std::string message;
+};
+
+// Define the Community Chest card codes
+enum class CommunityChestCardType {
+    AdvanceToGo,
+    FoundMoney,
+    GoToJail,
+    PayHospitalFees,
+    ConsumptionVoucher,
+    ChineseNewYear
+};
+
+struct CommunityChestCard {
+    CommunityChestCardType type;
+    std::string message;
 };
 
 struct Game{
     int n;
-    int free_parking;
     std::vector<Player> players;
     Tile tiles[40];
-    std::vector<ChanceCard> chance_card;
     int run();
     Game(int n);
     Game(std::string filename);
     void save(std::string filename);
+    bool change_amount(int amount, Player& player);
+    void Bankrupt(Player& player);
+    void payRent(Player& player, Tile& tile);
+    void apply_chance_card_effect(Player& player, const ChanceCard& card);
+    void apply_community_chest_card_effect(Player& player, const CommunityChestCard& card);
     bool bad_load = false; // used when error in loading save game
+    void buyHouse(Tile& tile, Player& player);
+    void buyHotel(Tile& tile, Player& player);
+    void sellHouse(Tile& tile, Player& player);
+    void sellHotel(Tile& tile, Player& player);
 };
 
 #endif

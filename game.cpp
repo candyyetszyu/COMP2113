@@ -15,7 +15,7 @@
 using namespace std;
 
 void Player::mortgageProperty(Tile& tile) {
-    if (tile.owner != position) {
+    if (tile.owner != index) {
         std::cout << "";
         return;
     }
@@ -36,7 +36,7 @@ void Player::unmortgageProperty(Tile& tile) {
     }
 
     // Check if the property is owned by the current player
-    if (tile.owner != position) {
+    if (tile.owner != index) {
         std::cout << "You do not own this property.\n";
         return;
     }
@@ -66,22 +66,18 @@ void Player::unmortgageProperty(Tile& tile) {
     std::cout << name << " unmortgaged " << tile.name << " for $" << mortgageAmount << ".\n";
 }
 
-void Game::endGame() {
-    exit(0); // Exit the program
-}
-
-void Player::Bankrupt(std::vector<Player>& players) {
-    std::cout << "The game is over for " << name << ".\n";
-
-    if (!is_bot) {
+void Game::Bankrupt(Player& player) {
+    if (!player.is_bot) {
         std::cout << "You've lost. Game over.\n";
-        game.endGame(); // End the game
+        exit(0); // Exit the program
         return;
+    } else {
+        std::cout << "The game is over for " << player.name << ".\n";
     }
 
     // Transfer all of the player's properties to the bank and unmortgage them
     for (Tile& tile : tiles) {
-        if (tile.owner == position) {
+        if (players[tile.owner].name == player.name) {
             tile.owner = -1;
             tile.isMortgaged = false;
             std::cout << "The property " << tile.name << " has been returned to the bank.\n";
@@ -109,35 +105,53 @@ void Player::Bankrupt(std::vector<Player>& players) {
     }
 
     // Remove this player from the game
-    money = 0;
-    std::cout << name << " has been removed from the game.\n";
+    player.money = 0;
+    std::cout << player.name << " has been removed from the game.\n";
 }
 
-bool Player::change(int amount){
+bool Game::change_amount(int amount, Player& player){
 	// int amount: positive when player receives money, negative when player loses money
 	// returns true when succeed, false when fail
-	money += amount;
-	if (money < 0){
-		cout << name << " has run out of funds.";
-        // Mortgage the player's properties one by one until they have enough money
+	player.money += amount;
+	if (player.money < 0){
+		cout << player.name << " has run out of funds.";
+        // Sell the player's hotels one by one until they have enough money
         for (Tile& tile : tiles) {
-            if (tile.owner == position && !tile.isMortgaged) {
-                mortgageProperty(tile);
-                if (money >= 0) {
+            if (players[tile.owner].name == player.name && tile.hotels > 0) {
+                sellHotel(tile, player);
+                if (player.money >= 0) {
                     break;
                 }
             }
-	}
-        if (money < 0) {
-            cout << name << " is still out of funds after mortgaging all properties. Game over for " << name << ".\n";
-            Bankrupt(players);
+        }
+        // Sell the player's houses one by one until they have enough money
+        for (Tile& tile : tiles) {
+            if (players[tile.owner].name == player.name && tile.houses > 0) {
+                sellHouse(tile, player);
+                if (player.money >= 0) {
+                    break;
+                }
+            }
+        }
+        // Mortgage the player's properties one by one until they have enough money
+        for (Tile& tile : tiles) {
+            if (players[tile.owner].name == player.name && !tile.isMortgaged) {
+                player.mortgageProperty(tile);
+                if (player.money >= 0) {
+                    break;
+                }
+            }
+        }
+        if (player.money < 0) {
+            cout << player.name << " is still out of funds after mortgaging all properties. Game over for " << player.name << ".\n";
+            Bankrupt(player);
             return false;
         }
     }
 	return true;
 }
 
-void Player::payRent(Tile& tile, std::vector<Player>& players) {
+void Game::payRent(Player& player, Tile& tile) {
     // Check if the tile is a property
     if (tile.type != 4 && tile.type != 7 && tile.type != 8) {
         std::cout << "This tile is not a property.\n";
@@ -145,7 +159,7 @@ void Player::payRent(Tile& tile, std::vector<Player>& players) {
     }
 
     // Check if the property is owned by another player
-    if (tile.owner == -1 || tile.owner == position) {
+    if (tile.owner == -1 || tile.owner == player.index) {
         std::cout << "This property is not owned by another player.\n";
         return;
     }
@@ -158,40 +172,24 @@ void Player::payRent(Tile& tile, std::vector<Player>& players) {
     rentAmount += tile.hotels * 100; // Each hotel increases the rent by $1000
 
     // Deduct the rent amount from the player's money
-    if (!change(-rentAmount)) {
-        std::cout << name << " doesn't have enough money to pay the rent.\n";
+    if (!change_amount(-rentAmount, player)) {
+        std::cout << player.name << " doesn't have enough money to pay the rent.\n";
         return;
     }
 
     // Add the rent amount to the owner's money
-    players[tile.owner].change(rentAmount);
+    change_amount(rentAmount, players[tile.owner]);
 
-    std::cout << name << " paid " << rentAmount << " to " << players[tile.owner].name << ".\n";
+    std::cout << player.name << " paid " << rentAmount << " to " << players[tile.owner].name << ".\n";
 }
-
-// Define the Chance card codes
-enum class ChanceCardType {
-    AdvanceToGo,
-    GoBackThreeSpaces,
-    PayRent,
-    GetOutOfJailFree,
-    PropertyRepairs,
-    HolidayBonus
-};
-
-struct ChanceCard {
-    ChanceCardType type;
-    string message;
-};
 
 // Define the Chance cards
 vector<ChanceCard> chanceCards = {
     { ChanceCardType::AdvanceToGo, "Advance to Go" },
     { ChanceCardType::GoBackThreeSpaces, "Go back three spaces" },
-    { ChanceCardType::PayRent, "Pay rent to another player" },
-    { ChanceCardType::GetOutOfJailFree, "Get out of Jail Free" },
-    { ChanceCardType::PropertyRepairs, "Make property repairs" },
-    { ChanceCardType::HolidayBonus, "Receive a holiday bonus" }
+    { ChanceCardType::GoToJail, "Go to jail" },
+    { ChanceCardType::PayEveryone, "Pay everyone" },
+    { ChanceCardType::PayBank, "Pay the bank" }
 };
 
 ChanceCard DrawChanceCard(vector<ChanceCard>& chanceCards) {
@@ -200,12 +198,12 @@ ChanceCard DrawChanceCard(vector<ChanceCard>& chanceCards) {
 }
 
 
-void apply_chance_card_effect(Player& player, const ChanceCard& card, Tile tiles[], int free_parking, vector<Player>& players) {
+void Game::apply_chance_card_effect(Player& player, const ChanceCard& card) {
     switch (card.type) {
         case ChanceCardType::AdvanceToGo:
             cout << player.name << " advances to GO and collects $500." << endl;
             player.position = 0; // GO tile is always at index 0
-            player.change(500);
+            player.money += 500;
             break;
 
         case ChanceCardType::GoToJail:
@@ -221,10 +219,10 @@ void apply_chance_card_effect(Player& player, const ChanceCard& card, Tile tiles
 
         case ChanceCardType::PayEveryone:
             cout << player.name << " has to pay everyone $2000." << endl;
-            if (player.change(-200)){
+            if (change_amount(-200, player)){
 	            for (auto& p : players) {
 	                if (p.name != player.name) {
-	                    p.change(200);
+	                    p.money += 200;
 	                }
 	            }
 	        }
@@ -232,26 +230,12 @@ void apply_chance_card_effect(Player& player, const ChanceCard& card, Tile tiles
 
         case ChanceCardType::PayBank:
             cout << player.name << " has to pay the bank $500." << endl;
-            if(player.change(-500)){
+            if(change_amount(-500, player)){
 
             }
             break;
     }
 }
-// Define the Community Chest card codes
-enum class CommunityChestCardType {
-    AdvanceToGo,
-    FoundMoney,
-    GoToJail,
-    PayHospitalFees,
-    ConsumptionVoucher,
-    ChineseNewYear
-};
-
-struct CommunityChestCard {
-    CommunityChestCardType type;
-    string message;
-};
 
 // Function to draw a Community Chest card randomly
 CommunityChestCard DrawCommunityChestCard(vector<CommunityChestCard>& communityChestCards) {
@@ -260,7 +244,7 @@ CommunityChestCard DrawCommunityChestCard(vector<CommunityChestCard>& communityC
 }
 
 // Apply the effect of the Community Chest card
-void apply_community_chest_card_effect(Player& player, const CommunityChestCard& card, Tile tiles[], int free_parking, vector<Player>& players) {
+void Game::apply_community_chest_card_effect(Player& player, const CommunityChestCard& card) {
     switch (card.type) {
         case CommunityChestCardType::AdvanceToGo:
             cout << player.name << " advanced to Go." << endl;
@@ -275,7 +259,7 @@ void apply_community_chest_card_effect(Player& player, const CommunityChestCard&
         case CommunityChestCardType::GoToJail:
             cout << player.name << " went directly to Jail." << endl;
             player.position = 10; // Move player to Jail space
-            player.inJail = true; // Set player inJail flag to true
+            player.in_jail = true; // Set player in_jail flag to true
             break;
 
         case CommunityChestCardType::PayHospitalFees:
@@ -308,19 +292,9 @@ vector<CommunityChestCard> communityChestCards = {
     { CommunityChestCardType::PayHospitalFees, "Pay hospital fees of $100" },
     { CommunityChestCardType::ConsumptionVoucher, "Consumption Voucher - Collect $100" },
     { CommunityChestCardType::ChineseNewYear, "It's Chinese New Year - Collect $20 from each player" }
+};
 
-// Draw a Community Chest card and apply its effect
-void draw_community_chest_card(Player& player, Tile tiles[], int free_parking, vector<Player>& players) {
-    if (!communityChestCards.empty()) {
-        CommunityChestCard card = DrawCommunityChestCard(communityChestCards);
-        apply_community_chest_card_effect(player, card, tiles, free_parking, players);
-    } else {
-        cout << "No more Community Chest cards left." << endl;
-    }
-}
-
-
-void Player::buyProperty(Tile& tile, int playerIndex) {
+void Player::buyProperty(Tile& tile) {
     if (tile.type != 4 && tile.type != 7 && tile.type != 8) {
         std::cout << "This tile is not buyable.\n";
         return;
@@ -330,8 +304,9 @@ void Player::buyProperty(Tile& tile, int playerIndex) {
         return;
     }
     if (money >= tile.price) {
-        tile.owner = playerIndex;
+        tile.owner = index;
         money -= tile.price;
+        cout << name << " bought " << tile.name << endl;
     } else {
         std::cout << "Not enough money to buy this property.\n";
     }
@@ -343,7 +318,7 @@ void Player::sellProperty(Tile& tile) {
         return;
     }
 
-    if (tile.owner == position) {
+    if (tile.owner == index) {
         tile.owner = -1;
         money += tile.price / 2;
     } else {
@@ -351,148 +326,101 @@ void Player::sellProperty(Tile& tile) {
     }
 }
 
-void Player::buyHouse(Tile& tile) {
-	if (tile.type != 4||tile.owner != position) {
-		std::cout << "You cannot buy houses here.\n";
+void Game::buyHouse(Tile& tile, Player& player) {
+	if (tile.type != 4||tile.owner != player.index) {
+        if (!player.is_bot){
+		  std::cout << "You cannot buy houses here.\n";
+        }
 		return;
 	}
-	if (tile.owner == position) {
-		int color_sum=0, houses_num_of_same_color=0;
-		bool house=false;
+	if (tile.owner == player.index) {
+		int color_sum=0, houses_num_of_same_color=0, num_of_tiles = (tile.group == 1 ||tile.group == 8) ? 2 : 3;
+
 		for (int i=0; i<39; i++){
-			if (tile[i].owner == tile.owner && tile[i].group==tile[position].group){
+			if (tiles[i].owner == tile.owner && tiles[i].group==tile.group){
 				color_sum+=1; //detect whether players hv all property of the group
-			}
-			if (tile[i].houses>=0){
-				house=true; //check whether the player have more than 1 house
-			}
-			if (tile[i].owner == tile.owner && tile[i].houses>=0){
-				//implement: cannot erect more than one house on any one property of any color-group until you have built one house on every property of that group
-				if (tile[i].group==tile[position].group){
-					houses_num_of_same_color+=1;
-				}
+                houses_num_of_same_color += tiles[i].houses;
 			}
 		}
-		if (house==false && money>=50){ //condition: player have 0 house
-			tile.houses+=1;
-			money -= 50;
+        if (color_sum != num_of_tiles){
+            if (!player.is_bot){
+                cout << "You cannot buy houses here until you own all property with the same colour" << endl;
+            }
+            return;
+        }
+        if (houses_num_of_same_color < tile.houses * num_of_tiles){
+            // number of houses is not saturated
+            if (!player.is_bot){
+                cout << "You cannot buy houses here until all properties have " << tile.houses << "house" << ((tile.houses == 1) ? "": "s") << "each" << endl;
+            }
+            return;
 		}
-		else if (tile[position].group == 1 ||tile[position].group == 8){
-			if (houses_num_of_same_color!=2 && tile.houses>=0){ //check whether players have 1 house on every property
-				std::cout << "You cannot buy houses here until you have built one house on every property of the group.\n";
-				return;
-			}
-			if (color_sum==2){
-				if (tile.houses==0 && money>=50){
-					tile.houses+=1;
-					money -= 50;
-				}
-				else if (tile.houses==1 && money>=100){
-					tile.houses+=1;
-					money -= 100;
-				}
-				else if (tile.houses==2 && money>=150){
-					tile.houses+=1;
-					money -= 150;
-				}
-				else if (tile.houses==3 && money>=200){
-					tile.houses+=1;
-					money -= 200;
-				}
-				else if (tile.houses>=4){
-					std::cout << "You can't build more than 4 houses on the same property, please consider upgrade houses to hotel.\n";
-				}
-			}
-		}
-		else if (tile[position].group == 2 ||tile[position].group == 3||tile[position].group == 4 ||tile[position].group == 5||tile[position].group == 6 ||tile[position].group == 7){
-			if (houses_num_of_same_color!=3 && tile.houses>=0){
-				std::cout << "You cannot buy houses here until you have built one house on every property of the group.\n";
-				return;
-			}
-			if (color_sum==3){
-				if (tile.houses==0 && money>=50){
-					tile.houses+=1;
-					money -= 50;
-				}
-				else if (tile.houses==1 && money>=100){
-					tile.houses+=1;
-					money -= 100;
-				}
-				else if (tile.houses==2 && money>=150){
-					tile.houses+=1;
-					money -= 150;
-				}
-				else if (tile.houses==3 && money>=200){
-					tile.houses+=1;
-					money -= 200;
-				}
-				else if (tile.houses>=4){
-					std::cout << "You can't build more than 4 houses on the same property, please consider upgrade houses to hotel.\n";
-				}
-			}
-		}
+
+        if (tile.houses>=4){
+            if (!player.is_bot){
+                std::cout << "You can't build more than 4 houses on the same property, please consider upgrade houses to hotel.\n";
+            }
+            return;
+        }
+        if (player.money>(tile.houses+1)*50){
+            player.money -= (tile.houses+1)*50;
+            tile.houses += 1;
+        }
 	}
 }
 
-void Player::buyHotel(Tile& tile) {
-	if (tile.type != 4||tile.owner != position) {
-		std::cout << "You cannot buy hotels here.\n";
+void Game::buyHotel(Tile& tile, Player& player) {
+	if (tile.type != 4||tile.owner != player.index) {
+        if (!player.is_bot){
+            std::cout << "You cannot buy hotels here.\n";
+        }
 		return;
 	}
-	if (tile.owner == position) {
-		int color_sum=0, four_houses_of_each=0;
+	if (tile.owner == player.index) {
+		int color_sum=0, four_houses_of_each=0, num_of_tiles = (tile.group == 1 ||tile.group == 8) ? 2 : 3;
 		for (int i=0; i<39; i++){
-			if (tile[i].owner == tile.owner && tile[i].group==tile[position].group && tile[i].houses>=0){
+			if (tiles[i].owner == tile.owner && tiles[i].group==tile.group){
 				color_sum+=1; //implement: check whether players hv houses at the property of the group
 			}
-			if (tile[i].owner == tile.owner && tile[i].houses==4){
+			if (tiles[i].owner == tile.owner && tiles[i].houses==4){
 				//check whether players have built four houses on each property
 				four_houses_of_each+=1;
 			}
 		}
-		if (tile[position].group == 1 ||tile[position].group == 8){
-			if (color_sum!=2 ||four_houses_of_each!=4){
-				std::cout << "You cannot buy hotel here until you have built four houses on every property of the group.\n";
-				return;
-			}
-			if (tile[position].hotels==1){
-				std::cout << "You cannot buy more than one hotel on every property of the group.\n";
-				return;
-			}
-			if (color_sum==2 && four_houses_of_each==4){
-				if (money>=50){
-					tile.hotels+=1;
-					tile.houses-=4;
-					money -= 50;
-				}
-			}
+        if (color_sum != num_of_tiles){
+            if (!player.is_bot){
+                cout << "You cannot buy houses here until you own all property with the same colour." << endl;
+            }
+            return;
+        }
+        if (four_houses_of_each != num_of_tiles){
+            if (!player.is_bot){
+			    std::cout << "You cannot buy hotel here until you have built four houses on every property of the group.\n";
+            }
+			return;
 		}
-		else if (tile[position].group == 2 ||tile[position].group == 3||tile[position].group == 4 ||tile[position].group == 5||tile[position].group == 6 ||tile[position].group == 7){
-			if (color_sum!=3 || four_houses_of_each!=4){
-				std::cout << "You cannot buy hotel here until you have built four houses on every property of the group.\n";
-				return;
-			}
-			if (tile[position].hotels==1){
-				std::cout << "You cannot buy more than one hotel on every property of the group.\n";
-				return;
-			}
-			if (color_sum==3 && four_houses_of_each==4){
-				if (money>=50){
-					tile.hotels+=1;
-					tile.houses-=4;
-					money -= 50;
-				}
-			}
+		if (tile.hotels==1){
+            if (!player.is_bot){
+			    std::cout << "You cannot buy more than one hotel on every property of the group.\n";
+            }
+			return;
+		}
+		if (player.money>=50){
+			tile.hotels = 1;
+			tile.houses = 0;
+			player.money -= 50;
 		}
 	}
 }
 
-void Player::sellHouse(Tile& tile) {
-    if (tile.type != 4 || tile.owner != position) {
-        std::cout << "You cannot sell houses here.\n";
+void Game::sellHouse(Tile& tile, Player& player) {
+    if (tile.type != 4 || tile.owner != player.index) {
+        if (!player.is_bot){
+            std::cout << "You cannot sell houses here.\n";
+        }
         return;
     }
-    if (tile.owner == position && tile.houses > 0) {
+    if (tile.owner == player.index && tile.houses > 0) {
         int houseCost = 0;
         switch (tile.houses) {
             case 1: houseCost = 50; break;
@@ -501,25 +429,29 @@ void Player::sellHouse(Tile& tile) {
             case 4: houseCost = 200; break;
         }
         tile.houses -= 1;
-        money += houseCost / 2;  // Player gets half the cost back
-        std::cout << "House sold.\n";
+        player.money += houseCost / 2;  // Player gets half the cost back
+        std::cout << player.name << "sells house on " <<  tile.name << ".\n";
     } else {
         std::cout << "No houses to sell on this property.\n";
     }
 }
 
-void Player::sellHotel(Tile& tile) {
-    if (tile.type != 4 || tile.owner != position) {
-        std::cout << "You cannot sell hotels here.\n";
+void Game::sellHotel(Tile& tile, Player& player) {
+    if (tile.type != 4 || tile.owner != player.index) {
+        if (!player.is_bot){
+            std::cout << "You cannot sell hotels here.\n";
+        }
         return;
     }
-    if (tile.owner == position && tile.hotels > 0) {
+    if (tile.owner == player.index && tile.hotels > 0) {
         int hotelCost = 50;
         tile.hotels -= 1;
-        money += hotelCost / 2;  // Player gets half the cost back
-        std::cout << "Hotel sold.\n";
+        player.money += hotelCost / 2;  // Player gets half the cost back
+        std::cout << player.name << "sells hotel on " <<  tile.name << ".\n";
     } else {
-        std::cout << "No hotels to sell on this property.\n";
+        if (!player.is_bot){
+            std::cout << "No hotels to sell on this property.\n";
+        }
     }
 }
 
@@ -537,13 +469,13 @@ Game::Game(int number_of_players){
 	        cin >> cmd;
 	        player.name = cmd;
         }
-	player.money = 1500;
+        player.money = 1500;
+        player.index = i;
         player.is_bot = i;  // results in is_bot = false only for the first player
         players.push_back(player);
     }
 
     initialise_tiles(tiles);
-    free_parking = 0;
     n = number_of_players;
 }
 
@@ -555,9 +487,7 @@ Game::Game(string filename){
 
 	try{
 		string word, w;
-		fin >> word; n = stoi(word);
-		fin >> word; free_parking = stoi(word);
-
+		getline(fin, word); n = stoi(word);
 		Player player;
 		for (int i=0; i<n; i++){
 			getline(fin, word);
@@ -567,6 +497,7 @@ Game::Game(string filename){
 			iss >> w; player.in_jail = stoi(w);
 			iss >> w; player.is_bot = stoi(w);
 			getline(iss, w); player.name = w;
+            player.index = i;
 			players.push_back(player);
 		}
 
@@ -580,32 +511,6 @@ Game::Game(string filename){
 			iss >> w; tiles[i].price = stoi(w);
 			iss >> w; tiles[i].group = stoi(w);
 			getline(iss, w); tiles[i].name = w;
-			players.push_back(player);
-		}
-
-		getline(fin, word);
-		ChanceCard cc;
-		for (int i=0; i<word.size(); i++){
-			switch(word[i]){
-				case 1:
-					cc.type = ChanceCardType::AdvanceToGo;
-					break;
-	    		case 2:
-	    			cc.type = ChanceCardType::GoToJail;
-					break;
-	    		case 3:
-	    			cc.type = ChanceCardType::GoBackThreeSpaces;
-					break;
-	    		case 4:
-	    			cc.type = ChanceCardType::PayEveryone;
-					break;
-	    		case 5:
-	    			cc.type = ChanceCardType::PayBank;
-					break;
-				default:
-					bad_load = true;
-			}
-			chance_card.push_back(cc);
 		}
 	} catch (...){
 		cout << "Error in loading game." << endl;
@@ -632,14 +537,17 @@ int Game::run(){
 
     while (true) {
         if (players[i].in_jail) {
+            string choice;
             // Player is in jail
             cout << players[i].name << " is in jail and must wait for their next turn." << endl;
-            cout << "Do you want to pay the $100 fine to be released immediately? (yes/no)" << endl;
-            string choice;
-            cin >> choice;
-            
+            if (!players[i].is_bot){
+                cout << "Do you want to pay the $100 fine to be released immediately? (yes/no)" << endl;
+                cin >> choice;
+            } else {
+                choice = (players[i].money > 500)? "yes": "no" ;
+            }
             if (choice == "yes") {
-            	if (players[i].change(-100)){
+            	if (change_amount(-100, players[i])){
 				    players[i].in_jail = false;
 				    cout << players[i].name << " paid a fine of $100 and is released from jail." << endl;
 				}
@@ -647,28 +555,6 @@ int Game::run(){
                 cout << players[i].name << " chose not to pay the fine and will remain in jail." << endl;
             }
         } else {
-            // Ask the player if they want to unmortgage any properties
-            if (players[i].is_bot) {
-                // Bot: unmortgage a property if money is more than $1000
-                if (players[i].money > 1000) {
-                    for (int j = 0; j < tile_size; ++j) {
-                        if (tiles[j].owner == i && tiles[j].isMortgaged) {
-                            players[i].unmortgageProperty(tiles[j]);
-                            break;
-                        }
-                    }
-                }
-            } else {
-                std::string unmortgage;
-                std::cout << players[i].name << ", do you want to unmortgage any properties? (yes/no)\n";
-                std::cin >> unmortgage;
-                if (unmortgage == "yes") {
-                    int propertyIndex;
-                    std::cout << "Enter the index of the property you want to unmortgage:\n";
-                    std::cin >> propertyIndex;
-                    players[i].unmortgageProperty(tiles[propertyIndex]);
-                }
-            }
             // roll dice
             int dice1 = rand() % 6 + 1;
             int dice2 = rand() % 6 + 1;
@@ -677,9 +563,9 @@ int Game::run(){
             // move player position
             players[i].position = (players[i].position + dice1 + dice2);
             if (players[i].position >= tile_size){
-            	players[i].pos -= tile_size;
+            	players[i].position -= tile_size;
             	cout << players[i].name << " passed or landed on Go and collected $200." << endl;
-                players[i].change(200);
+                players[i].money += 200;
             }
             cout << players[i].name << " moved to " << tiles[players[i].position].name << "." << endl;
 
@@ -689,27 +575,30 @@ int Game::run(){
                     cout << players[i].name << " got a chance card!" << endl;
 
                     // apply chance card effect if available
-                    void draw_chance_card(Player& player, Tile tiles[], int free_parking, vector<Player>& players) {
-			if (!chanceCards.empty()) {
-			    ChanceCard card = DrawChanceCard(chanceCards);
-			    apply_chance_card_effect(player, card, tiles, free_parking, players);}
-			else {
-			    cout << "No more Chance cards left." << endl;
-			}
-		    }
+            	    if (!chanceCards.empty()) {
+        			    ChanceCard card = DrawChanceCard(chanceCards);
+        			    apply_chance_card_effect(players[i], card);}
+        			else {
+        			    cout << "No more Chance cards left." << endl;
+        			}
                     break;
                 case 1: // community chest
-		    cout << players[i].name << " drew a Community Chest card." << endl;
-		    draw_community_chest_card(players[i], tiles, free_parking, players);
-		    break;
-
+        		    cout << players[i].name << " drew a Community Chest card." << endl;
+        		    
+                    // apply community chest card effect if available
+                    if (!communityChestCards.empty()) {
+                        CommunityChestCard card = DrawCommunityChestCard(communityChestCards);
+                        apply_community_chest_card_effect(players[i], card);}
+                    else {
+                        cout << "No more Community Chest cards left." << endl;
+                    }
+        		    break;
                 case 2: // go to jail
                     cout << players[i].name << " went to jail!" << endl;
                     players[i].position = 10; // Go to Jail tile
                     players[i].in_jail = true; // Set the player in jail
                     break;
                 case 3: // free parking
-                    cout << players[i].name << " moved to free parking." << endl;
                     // Nothing happens, player's turn ends.
                     break;
                 case 4: // property
@@ -718,60 +607,60 @@ int Game::run(){
                         if (players[i].is_bot) {
                             // Bot: buy the property if money is more than $1000
                             if (players[i].money > 1000) {
-                                players[i].buyProperty(tiles[players[i].position], i);
+                                players[i].buyProperty(tiles[players[i].position]);
                             }
                         } else {
 	                        std::string buy;
 	                        std::cout << players[i].name << ", do you want to buy this property? (yes/no)\n";
 	                        std::cin >> buy;
 	                        if (buy == "yes") {
-	                            players[i].buyProperty(tiles[players[i].position], i);
+	                            players[i].buyProperty(tiles[players[i].position]);
 	                        }
 	                    }
                     }
                         // If the property is owned by another player, the current player must pay rent
                     else if (tiles[players[i].position].owner != i && tiles[players[i].position].owner != -1) {
-                        players[i].payRent(tiles[players[i].position], players);
+                        payRent(players[i], tiles[players[i].position]);
                     }
                     break;
                 case 5: // go
                     break;
                 case 6: // tax
-                    cout << players[i].name << " paid $" << tiles[players[i].position].name << " tax!" << endl;
-                    players[i].change(tiles[players[i].position].price);
+                    cout << players[i].name << " paid $" << tiles[players[i].position].price << " tax!" << endl;
+                    change_amount(-tiles[players[i].position].price, players[i]);
                     break;
                 case 7: // railroad
-		    // Check if the railroad is owned by another player
-		    if (tiles[players[i].position].owner != -1 && tiles[players[i].position].owner != i) {
-		        // Calculate the rent based on the number of railroads owned by the owner
-		        int numRailroads = 0;
-		        for (int j = 0; j < tile_size; ++j) {
-		            if (tiles[j].type == 7 && tiles[j].owner == tiles[players[i].position].owner) {
-		                numRailroads++;
-		            }
-		        }
-		        int rentAmount = 50 * numRailroads ; // Rent amount based on the number of railroads owned
-		        cout << players[i].name << " paid $" << rentAmount << " as rent to " << players[tiles[players[i].position].owner].name << "." << endl;
-		        players[i].change(-rentAmount);
-		        players[tiles[players[i].position].owner].change(rentAmount);
-		    }
-		    // If the railroad is unowned, ask the player if they want to buy it
-		    else if (tiles[players[i].position].owner == -1) {
-		        if (players[i].is_bot) {
-		            // Bot: buy the railroad if money is more than $1000
-		            if (players[i].money > 1000) {
-		                players[i].buyProperty(tiles[players[i].position], i);
-		            }
-		        } else {
-		            std::string buy;
-		            std::cout << players[i].name << ", do you want to buy this railroad? (yes/no)\n";
-		            std::cin >> buy;
-		            if (buy == "yes") {
-		                players[i].buyProperty(tiles[players[i].position], i);
-		            }
-		        }
-		    }
-		    break;
+        		    // Check if the railroad is owned by another player
+        		    if (tiles[players[i].position].owner != -1 && tiles[players[i].position].owner != i) {
+        		        // Calculate the rent based on the number of railroads owned by the owner
+        		        int numRailroads = 0;
+        		        for (int j = 0; j < tile_size; ++j) {
+        		            if (tiles[j].type == 7 && tiles[j].owner == tiles[players[i].position].owner) {
+        		                numRailroads++;
+        		            }
+                        }
+                        int rentAmount = 50 * numRailroads ; // Rent amount based on the number of railroads owned
+        		        cout << players[i].name << " paid $" << rentAmount << " as rent to " << players[tiles[players[i].position].owner].name << "." << endl;
+        		        change_amount(-rentAmount, players[i]);
+        		        change_amount(rentAmount, players[tiles[players[i].position].owner]);
+        		    }
+        		    // If the railroad is unowned, ask the player if they want to buy it
+        		    else if (tiles[players[i].position].owner == -1) {
+        		        if (players[i].is_bot) {
+        		            // Bot: buy the railroad if money is more than $1000
+        		            if (players[i].money > 1000) {
+        		                players[i].buyProperty(tiles[players[i].position]);
+        		            }
+        		        } else {
+        		            std::string buy;
+        		            std::cout << players[i].name << ", do you want to buy this railroad? (yes/no)\n";
+        		            std::cin >> buy;
+        		            if (buy == "yes") {
+        		                players[i].buyProperty(tiles[players[i].position]);
+        		            }
+        		        }
+        		    }
+        		    break;
 		
 		case 8: // utility
 		    // Check if the utility is owned by another player
@@ -780,22 +669,22 @@ int Game::run(){
 		        int diceSum = dice1 + dice2;
 		        int rentAmount = (diceSum == 12) ? 10 * diceSum : 4 * diceSum; // Rent amount based on the roll of the dice
 		        cout << players[i].name << " paid $" << rentAmount << " as rent to " << players[tiles[players[i].position].owner].name << "." << endl;
-		        players[i].change(-rentAmount);
-		        players[tiles[players[i].position].owner].change(rentAmount);
+		        change_amount(-rentAmount, players[i]);
+		        change_amount(rentAmount, players[tiles[players[i].position].owner]);
 		    }
 		    // If the utility is unowned, ask the player if they want to buy it
 		    else if (tiles[players[i].position].owner == -1) {
 		        if (players[i].is_bot) {
 		            // Bot: buy the utility if money is more than $1000
 		            if (players[i].money > 1000) {
-		                players[i].buyProperty(tiles[players[i].position], i);
+		                players[i].buyProperty(tiles[players[i].position]);
 		            }
 		        } else {
 		            std::string buy;
 		            std::cout << players[i].name << ", do you want to buy this utility? (yes/no)\n";
 		            std::cin >> buy;
 		            if (buy == "yes") {
-		                players[i].buyProperty(tiles[players[i].position], i);
+		                players[i].buyProperty(tiles[players[i].position]);
 		            }
 		        }
 		    }
@@ -804,7 +693,28 @@ int Game::run(){
         }
 
         PrintBoard(players, tiles);
-
+        // Ask the player if they want to unmortgage any properties
+        if (players[i].is_bot) {
+            // Bot: unmortgage a property if money is more than $1000
+            if (players[i].money > 1000) {
+                for (int j = 0; j < tile_size; ++j) {
+                    if (tiles[j].owner == i && tiles[j].isMortgaged) {
+                        players[i].unmortgageProperty(tiles[j]);
+                        break;
+                    }
+                }
+            }
+        } else {
+            std::string unmortgage;
+            std::cout << players[i].name << ", do you want to unmortgage any properties? (yes/no)\n";
+            std::cin >> unmortgage;
+            if (unmortgage == "yes") {
+                int propertyIndex;
+                std::cout << "Enter the index of the property you want to unmortgage:\n";
+                std::cin >> propertyIndex;
+                players[i].unmortgageProperty(tiles[propertyIndex]);
+            }
+        }
         // Ask the player if they want to sell any properties or buy/sell houses/hotels
         if (players[i].is_bot) {
             if (players[i].money < 500) {
@@ -812,10 +722,10 @@ int Game::run(){
                 for (int j = 0; j < tile_size; ++j) {
                     if (tiles[j].owner == i) {
                         if (tiles[j].houses > 0) {
-                            players[i].sellHouse(tiles[j]);
+                            sellHouse(tiles[j], players[i]);
                             break;
                         } else if (tiles[j].hotels > 0) {
-                            players[i].sellHotel(tiles[j]);
+                            sellHotel(tiles[j], players[i]);
                             break;
                         } else {
                             players[i].sellProperty(tiles[j]);
@@ -828,10 +738,10 @@ int Game::run(){
                 for (int j = 0; j < tile_size; ++j) {
                     if (tiles[j].owner == i) {
                         if (tiles[j].houses < 4) {
-                            players[i].buyHouse(tiles[j]);
+                            buyHouse(tiles[j], players[i]);
                             break;
                         } else if (tiles[j].houses == 4 && tiles[j].hotels == 0) {
-                            players[i].buyHotel(tiles[j]);
+                            buyHotel(tiles[j], players[i]);
                             break;
                         }
                     }
@@ -839,31 +749,32 @@ int Game::run(){
             }
         } else {
             std::string action;
-            std::cout << players[i].name << ", do you want to sell any properties, or buy/sell houses or hotels? (sell_property/buy_house/buy_hotel/sell_house/sell_hotel/exit)\n";
+            std::cout << players[i].name << ", do you want to sell any properties, or buy/sell houses or hotels? (yes/no)\n";
             std::cin >> action;
-            if (action == "exit") {
-                return;
-            }
-            int propertyIndex;
-            std::cout << "Enter the index of the property:\n";
-            std::cin >> propertyIndex;
-            if (action == "sell_property") {
-                players[i].sellProperty(tiles[propertyIndex]);
-            } else if (action == "buy_house") {
-                players[i].buyHouse(tiles[propertyIndex]);
-            } else if (action == "buy_hotel") {
-                players[i].buyHotel(tiles[propertyIndex]);
-            } else if (action == "sell_house") {
-                players[i].sellHouse(tiles[propertyIndex]);
-            } else if (action == "sell_hotel") {
-                players[i].sellHotel(tiles[propertyIndex]);
+            if (action == "yes") {
+                std::cout << "Please enter your action: (sell_property/buy_house/buy_hotel/sell_house/sell_hotel)\n";
+                std::cin >> action;
+                int propertyIndex;
+                std::cout << "Enter the index of the property: (Go is 0, Jail is 10, Free Parking is 20, Go to Jail is 30)\n";
+                std::cin >> propertyIndex;
+                if (action == "sell_property") {
+                    players[i].sellProperty(tiles[propertyIndex]);
+                } else if (action == "buy_house") {
+                    buyHouse(tiles[propertyIndex], players[i]);
+                } else if (action == "buy_hotel") {
+                    buyHotel(tiles[propertyIndex], players[i]);
+                } else if (action == "sell_house") {
+                    sellHouse(tiles[propertyIndex], players[i]);
+                } else if (action == "sell_hotel") {
+                    sellHotel(tiles[propertyIndex], players[i]);
+                }
             }
         }
 
         if (i + 1 == n) {
             // end round
             while (true){
-            	cout << "Enter command: quit/next/rules/save/load:" << endl;
+            	cout << "Enter command: quit/next/rules/save:" << endl;
             	cin >> cmd;
 	            if (cmd == "rules") {
 	                rule();
@@ -896,7 +807,6 @@ void Game::save(string filename){
 	}
 
 	fout << n << endl;
-	fout << free_parking << endl;
 
 	// save data of players
 	vector<Player>::iterator ip;
@@ -908,53 +818,5 @@ void Game::save(string filename){
 	for (int i=0; i < tile_size; i++){
 		fout << tiles[i].owner << " " << tiles[i].houses << " " << tiles[i].hotels << " " << tiles[i].type << " " << tiles[i].price << " " << tiles[i].group << " " << tiles[i].name << endl;
 	}
-
-	// save data of chance cards
-	fout << chance_card.size() << endl;
-	for (const auto& card : chance_card) {
-            switch (card.type) {
-                case ChanceCardType::AdvanceToGo:
-                    fout << "AdvanceToGo" << endl;
-                    break;
-                case ChanceCardType::GoToJail:
-                    fout << "GoToJail" << endl;
-                    break;
-                case ChanceCardType::GoBackThreeSpaces:
-                    fout << "GoBackThreeSpaces" << endl;
-                    break;
-                case ChanceCardType::PayEveryone:
-                    fout << "PayEveryone" << endl;
-                    break;
-                case ChanceCardType::PayBank:
-                    fout << "PayBank" << endl;
-                    break;
-		    }
-	    }
-
-	// Save data of community chest cards
-    	fout << community_chest.size() << endl;
-    	for (const auto& card : community_chest) {
-            switch (card.type) {
-                case CommunityChestCardType::AdvanceToGo:
-                    fout << "AdvanceToGo" << endl;
-                    break;
-                case CommunityChestCardType::FoundMoney:
-                    fout << "FoundMoney" << endl;
-                    break;
-                case CommunityChestCardType::GoToJail:
-                    fout << "GoToJail" << endl;
-                    break;
-                case CommunityChestCardType::PayHospitalFees:
-                    fout << "PayHospitalFees" << endl;
-                    break;
-                case CommunityChestCardType::ConsumptionVoucher:
-                    fout << "ConsumptionVoucher" << endl;
-                    break;
-                case CommunityChestCardType::ChineseNewYear:
-                    fout << "ChineseNewYear" << endl;
-                    break;
-            }
-        }
-	
 	fout.close();
 }

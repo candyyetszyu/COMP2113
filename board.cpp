@@ -8,7 +8,7 @@
 using namespace std;
 
 void PrintBoard(const vector<Player>& players, Tile tiles[]) {
-    string boardLayout[45] = {
+    string boardLayout[67] = {
         "|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|",
         "|  Free Parking   |   Lei Yue Mun   |    Provincial   |  Wong Tai Sin   |  Kowloon Tong   | Kowloon station |    Kwun Tong    |    Mong Kok     |   Water Works   |  Tsim Sha Tsui  |   Go to Jail    |",
         "|                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |                 |",
@@ -78,11 +78,6 @@ void PrintBoard(const vector<Player>& players, Tile tiles[]) {
         "|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|"
     };
 
-    // Clear player positions
-    for (int i = 0; i < 40; ++i) {
-        tiles[i].players.clear();
-    }
-
     // Update the board layout with property details
     for (const auto& player : players) {
         if (tiles[player.position].type == 4 && tiles[player.position].owner != -1) {
@@ -99,11 +94,6 @@ void PrintBoard(const vector<Player>& players, Tile tiles[]) {
         
             tile.replace(insertPosition, propertyDetails.size(), propertyDetails);
         }
-    }
-
-    // Update the board layout with player positions
-    for (const auto& player : players) {
-        tiles[player.position].players.push_back(player.name);
     }
 
     // Print the board

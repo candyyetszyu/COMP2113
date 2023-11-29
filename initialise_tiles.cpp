@@ -135,7 +135,7 @@ void initialise_tiles(Tile tiles[]){
 
     //Income Tax
     else if(i==4){
-      tiles[i].set(-1,0,0,6,0,0,"Income Tax");
+      tiles[i].set(-1,0,0,6,100,0,"Income Tax");
     }
 
     //Salary Tax
@@ -162,17 +162,17 @@ void initialise_tiles(Tile tiles[]){
         
     //Provincial
     else if(i==20){
-      tiles[i].set(-1,0,0,15,0,0,"Provincial");
+      tiles[i].set(-1,0,0,8,0,0,"Provincial");
     } 
       
     //Water Works
     else if(i==28){
-      tiles[i].set(-1,0,0,16,150,0,"Water Works");
+      tiles[i].set(-1,0,0,8,150,0,"Water Works");
     } 
 
     //Hong Kong Electric
     else if(i==12){
-        tiles[i].set(-1,0,0,7,150,0,"Hong Kong Electric");
+        tiles[i].set(-1,0,0,8,150,0,"Hong Kong Electric");
       }
   }
 }
