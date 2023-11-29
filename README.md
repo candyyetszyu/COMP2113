@@ -42,17 +42,17 @@ You can always check the game rules with the command "rules" again during the tr
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
-Team member list for Monopoly - Hong Kong Version
+# Team member list for Monopoly - Hong Kong Version
 
-Chan Pui Wai Wesley (3035922702)
+1. Chan Pui Wai Wesley (3035922702) [wesleychan2010]
 
-Chuang Chun Ki (3035936882)
+2. Chuang Chun Ki (3035936882) [KimChuang]
 
-Ku Chung Yiu (3036101434)
+3. Ku Chung Yiu (3036101434) [ChungTau0222]
 
-Ye Tsz Yu (3036075702)
+4. Ye Tsz Yu (3036075702) [candyyetszyu]
 
-Yeung Yui Sze (3035667390)
+5. Yeung Yui Sze (3035667390) [raissayeung]
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
