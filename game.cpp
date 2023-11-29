@@ -330,7 +330,7 @@ void Player::buyHouse(Tile& tile) {
 		return;
 	}
 	if (tile.owner == position) {
-		int color_sum=0, houses_num_of_same_color=0;
+		int color_sum=0, houses_num_of_same_color=0, houses_num=0;
 		for (int i=0; i<39; i++){
 			if (tile[i].owner == tile.owner && tile[i].group==tile[position].group){
 				color_sum+=1; //detect whether players hv all property of the group
