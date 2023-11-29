@@ -169,10 +169,36 @@ void Player::payRent(Tile& tile, std::vector<Player>& players) {
     std::cout << name << " paid " << rentAmount << " to " << players[tile.owner].name << ".\n";
 }
 
-ChanceCard DrawChanceCard(vector<ChanceCard>& chance_card) {
-    int randomIndex = rand() % chance_card.size();
-    return chance_card[randomIndex];
+// Define the Chance card codes
+enum class ChanceCardType {
+    AdvanceToGo,
+    GoBackThreeSpaces,
+    PayRent,
+    GetOutOfJailFree,
+    PropertyRepairs,
+    HolidayBonus
+};
+
+struct ChanceCard {
+    ChanceCardType type;
+    string message;
+};
+
+// Define the Chance cards
+vector<ChanceCard> chanceCards = {
+    { ChanceCardType::AdvanceToGo, "Advance to Go" },
+    { ChanceCardType::GoBackThreeSpaces, "Go back three spaces" },
+    { ChanceCardType::PayRent, "Pay rent to another player" },
+    { ChanceCardType::GetOutOfJailFree, "Get out of Jail Free" },
+    { ChanceCardType::PropertyRepairs, "Make property repairs" },
+    { ChanceCardType::HolidayBonus, "Receive a holiday bonus" }
+};
+
+ChanceCard DrawChanceCard(vector<ChanceCard>& chanceCards) {
+    int randomIndex = rand() % chanceCards.size();
+    return chanceCards[randomIndex];
 }
+
 
 void apply_chance_card_effect(Player& player, const ChanceCard& card, Tile tiles[], int free_parking, vector<Player>& players) {
     switch (card.type) {
