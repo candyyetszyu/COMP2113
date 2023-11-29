@@ -46,7 +46,7 @@ Team member list for Monopoly - Hong Kong Version
 
 Chan Pui Wai Wesley (3035922702)
 
-Chuang Chun Ki
+Chuang Chun Ki (3035936882)
 
 Ku Chung Yiu (3036101434)
 
