@@ -351,7 +351,7 @@ void Game::buyHouse(Tile& tile, Player& player) {
         if (houses_num_of_same_color < tile.houses * num_of_tiles){
             // number of houses is not saturated
             if (!player.is_bot){
-                cout << "You cannot buy houses here until all properties have " << tile.houses << "house" << ((tile.houses == 1) ? "": "s") << "each" << endl;
+                cout << "You cannot buy houses here until all properties have " << tile.houses << " house" << ((tile.houses == 1) ? "": "s") << " each" << endl;
             }
             return;
 		}
@@ -751,24 +751,28 @@ int Game::run(){
             }
         } else {
             std::string action;
-            std::cout << players[i].name << ", do you want to sell any properties, or buy/sell houses or hotels? (yes/no)\n";
-            std::cin >> action;
-            if (action == "yes") {
-                std::cout << "Please enter your action: (sell_property/buy_house/buy_hotel/sell_house/sell_hotel)\n";
+            while(true){
+                std::cout << players[i].name << ", do you want to sell any properties, or buy/sell houses or hotels? (yes/no)\n";
                 std::cin >> action;
-                int propertyIndex;
-                std::cout << "Enter the index of the property: (Go is 0, Jail is 10, Free Parking is 20, Go to Jail is 30)\n";
-                std::cin >> propertyIndex;
-                if (action == "sell_property") {
-                    players[i].sellProperty(tiles[propertyIndex]);
-                } else if (action == "buy_house") {
-                    buyHouse(tiles[propertyIndex], players[i]);
-                } else if (action == "buy_hotel") {
-                    buyHotel(tiles[propertyIndex], players[i]);
-                } else if (action == "sell_house") {
-                    sellHouse(tiles[propertyIndex], players[i]);
-                } else if (action == "sell_hotel") {
-                    sellHotel(tiles[propertyIndex], players[i]);
+                if (action == "yes") {
+                    std::cout << "Please enter your action: (sell_property/buy_house/buy_hotel/sell_house/sell_hotel)\n";
+                    std::cin >> action;
+                    int propertyIndex;
+                    std::cout << "Enter the index of the property: (Go is 0, Jail is 10, Free Parking is 20, Go to Jail is 30)\n";
+                    std::cin >> propertyIndex;
+                    if (action == "sell_property") {
+                        players[i].sellProperty(tiles[propertyIndex]);
+                    } else if (action == "buy_house") {
+                        buyHouse(tiles[propertyIndex], players[i]);
+                    } else if (action == "buy_hotel") {
+                        buyHotel(tiles[propertyIndex], players[i]);
+                    } else if (action == "sell_house") {
+                        sellHouse(tiles[propertyIndex], players[i]);
+                    } else if (action == "sell_hotel") {
+                        sellHotel(tiles[propertyIndex], players[i]);
+                    }
+                } else {
+                    break;
                 }
             }
         }
