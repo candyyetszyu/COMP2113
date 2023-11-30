@@ -60,15 +60,15 @@ You can always check the game rules with the command "rules" again during the tr
 
 Element 1. Generation of random game sets or events
 
-We use random number generation (RNG) for our game such as the outcome of rolling dice, the effects from chance card/community chest, and so on.
+We use random number generation (RNG) for our game such as the outcome of rolling dice, the effects from chance card/community chest card, and so on.
 
 Element 2. Data structures for storing game status
 
-We implement data structures into arrays in our game, especially when we have to create an array of tiles for the game board so that we can save the details of the properties of each tile.
+We implement data structures into arrays in our game, such as using an array of tiles for the game board for saving the details of the properties of each tile.
 
 Element 3. Dynamic memory management
 
-We use <vector> in our programs so that the game status of players and the board will keep updating after they roll the dice.
+We store players in a vector which has a dynamic length based on user input.
 
 Element 4. File input/output
 
