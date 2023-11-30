@@ -3,6 +3,7 @@
 #include<vector>
 
 #include"game.h"
+#include"rules.h"
 
 using namespace std;
 
@@ -11,7 +12,7 @@ int main(){
 	bool bad_input = false;
 
 	while (true){
-		cout << "Enter command: quit/play/load:" <<endl;
+		cout << "Enter command: quit/play/load/rules:" <<endl;
 		cin >> cmd;
 		if (cmd == "quit"){
 			return 0;
@@ -38,6 +39,8 @@ int main(){
 			cin >> fn;
 			Game game(fn);
 			game.run();
+		} else if (cmd == "rules"){
+			rule();
 		} else {
 			cout << "Command \"" << cmd << "\" is invalid. Please retry." << endl;
 		}
